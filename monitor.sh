@@ -1,22 +1,12 @@
 #!/bin/bash
 
-# create a header row for the CSV file
-echo "timestamp,cpu_usage,disk_usage" > utilization.csv
+# Create headers in the CSV file
+echo "Date and Time,CPU Usage (%),Disk Usage (%)" > usage.csv
 
-# function to monitor CPU utilization
-monitor_cpu() {
-  while true
-  do
-    timestamp=$(date +%s)
-    cpu_usage=$(top -n 1 | awk '/%Cpu/ {print $2}')
-    disk_usage=$(df -h | awk '$NF=="/"{printf "%s\n", $5}')
-    echo "$timestamp,$cpu_usage,$disk_usage" >> utilization.csv
-    sleep 5
-  done
-}
-
-# start the monitoring function in the background
-monitor_cpu &
-
-# wait for the monitoring to finish
-wait
+while true; do
+    cpu=$(top -l 1 -n 1 -stats "cpu" | awk '/^CPU usage:/{print $3+$5}')
+    disk=$(df -h | awk 'NR==2{print $5}')
+    timestamp=$(date +"%Y/%m/%d %H:%M:%S")
+    echo "$timestamp,$cpu%,$disk" >> usage.csv
+    sleep 2
+done
