@@ -27,3 +27,26 @@ make simple_example.cc
 ```bash
 ./simple_example
 ```
+
+**Installing WiredTiger**
+```bash
+sudo apt-get update
+sudo apt-get install -y wiredtiger
+```
+**Running WiredTiger**
+1. List commands
+``` bash
+wt
+```
+2. Creating a table
+``` bash
+wt create -c key_format=<type>,value_format=<type> <tablename>
+```
+3. Writing to a table
+``` bash
+wt write <tablename> -a <key> <value>
+```
+4. Reading from table
+``` bash
+wt read <tablename> <key>
+```
