@@ -8,14 +8,17 @@ sudo apt-get install -y openjdk-8-jdk maven
 java -version
 
 # Setup YCSB
-# git clone https://github.com/brianfrankcooper/YCSB.git
-# cd YCSB
-# mvn -pl site.ycsb:rocksdb-binding -am clean package
-
 curl -O --location https://github.com/brianfrankcooper/YCSB/releases/download/0.17.0/ycsb-0.17.0.tar.gz
 tar xfvz ycsb-0.17.0.tar.gz
 rm ycsb-0.17.0.tar.gz
 
-# cd ycsb-0.17.0
-# ./bin/ycsb.sh load basic -P workloads/workloada > outWorkload.txt
-# ./bin/ycsb.sh run basic -P workloads/workloada > outWorkloadRun.txt
+# Install WiredTiger
+sudo apt-get update
+sudo apt-get install -y wiredtiger
+
+# Install RocksDB
+sudo apt-get install build-essential libsnappy-dev zlib1g-dev libbz2-dev libgflags-dev
+git clone https://github.com/facebook/rocksdb.git
+cd rocksdb
+cd examples/; make all
+cd ..
