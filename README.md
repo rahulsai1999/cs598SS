@@ -1,11 +1,10 @@
-# cs598SS
-**Installing RocksDB**
+# CS598SS
+
+
+## Installation/Basic Examples
 
 ```bash
-sudo apt-get install build-essential libsnappy-dev zlib1g-dev libbz2-dev libgflags-dev
-git clone https://github.com/facebook/rocksdb.git
-cd rocksdb
-cd examples/; make all
+bash install.sh
 ```
 
 **Running RocksDB**
@@ -28,11 +27,6 @@ make simple_example.cc
 ./simple_example
 ```
 
-**Installing WiredTiger**
-```bash
-sudo apt-get update
-sudo apt-get install -y wiredtiger
-```
 **Running WiredTiger**
 1. List commands
 ``` bash
@@ -50,3 +44,9 @@ wt write <tablename> -a <key> <value>
 ``` bash
 wt read <tablename> <key>
 ```
+
+## Project Checkpoint Requirements: 
+- 100M insert records 12GB data
+- 4GB memory
+- YCSB uniform dist
+- xl170 machine for SATA (CGROUP settings same on both m510 and xl170)
