@@ -45,7 +45,8 @@ wt write <tablename> -a <key> <value>
 wt read <tablename> <key>
 ```
 
-## Project Checkpoint Requirements: 
+## Project Checkpoint Requirements:
+- Mount more NVME partitions on m510 and install a filesystem
 - 100M insert records 12GB data
 - 4GB memory
 - YCSB uniform dist
