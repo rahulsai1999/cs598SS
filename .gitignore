@@ -1,5 +1,6 @@
 .env
 .DS_Store
+*.out
 keys/
 ycsb-0.17.0/
 ycsb-0.17.0.tar.gz
