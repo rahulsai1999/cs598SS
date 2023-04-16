@@ -4,7 +4,7 @@
 echo "Timestamp,CPU Usage (%),Disk Usage (%)" > usage.csv
 
 while true; do
-    cpu=$(top -l 1 -n 1 -stats "cpu" | awk '/^CPU usage:/{print $3+$5}')
+    cpu=$(top -b -n1 | awk '/^%Cpu/{print $2+$4}')
     disk=$(df -h | awk 'NR==2{print $5}')
     timestamp=$(date +%s)
     echo "$timestamp,$cpu%,$disk" >> usage.csv
