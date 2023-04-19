@@ -12,9 +12,23 @@ curl -O --location https://github.com/brianfrankcooper/YCSB/releases/download/0.
 tar xfvz ycsb-0.17.0.tar.gz
 rm ycsb-0.17.0.tar.gz
 
+# Install CMake
+sudo apt-get install -y cmake
+
+# Install Swig
+sudo apt-get install -y swig
+
 # Install WiredTiger
-sudo apt-get update
-sudo apt-get install -y wiredtiger
+git clone https://github.com/wiredtiger/wiredtiger.git
+cd wiredtiger
+mkdir build
+cd build
+cmake ../.
+### There will be errors with <filesystem.h>, go to wiredtiger/bench/workgen/workgen.cpp and replace <filesystem.h> with <experimental/filesystem.h>
+### also replace all instances of std::filesystem in the file with std::experimental::filesystem
+make
+cd examples/c
+make
 
 # Install RocksDB
 sudo apt-get install build-essential libsnappy-dev zlib1g-dev libbz2-dev libgflags-dev
