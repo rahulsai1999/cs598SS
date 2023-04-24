@@ -1,17 +1,3 @@
-/usr/bin/java  -classpath /Users/rahulsai/Desktop/CS598_SS/code/ycsb-0.17.0/conf:/Users/rahulsai/Desktop/CS598_SS/code/ycsb-0.17.0/lib/HdrHistogram-2.1.4.jar:/Users/rahulsai/Desktop/CS598_SS/code/ycsb-0.17.0/lib/core-0.17.0.jar:/Users/rahulsai/Desktop/CS598_SS/code/ycsb-0.17.0/lib/htrace-core4-4.1.0-incubating.jar:/Users/rahulsai/Desktop/CS598_SS/code/ycsb-0.17.0/lib/jackson-core-asl-1.9.4.jar:/Users/rahulsai/Desktop/CS598_SS/code/ycsb-0.17.0/lib/jackson-mapper-asl-1.9.4.jar site.ycsb.Client -load -db site.ycsb.BasicDB -P workloads/workloada
-***************** properties *****************
-"insertproportion"="0"
-"readproportion"="0.5"
-"scanproportion"="0"
-"readallfields"="true"
-"dotransactions"="false"
-"requestdistribution"="zipfian"
-"workload"="site.ycsb.workloads.CoreWorkload"
-"recordcount"="1000"
-"updateproportion"="0.5"
-"db"="site.ycsb.BasicDB"
-"operationcount"="1000"
-**********************************************
 INSERT usertable user6284781860667377211 [ field1=.<`3X9(Z%=[?)"n:%`#W3!Kw>%<)'r3]k+Ey5(d.;<:*>).r6#p*X!;"5,f*A?Ia84n.I-5T6I#+:l7T'6/.,&~*4b24:92f> field0=,9:<3>-I-9;6 Ga7U%1Aw*8*'Oi?N3-4|:_'>9x:7"#_))"|-+z.Ge>1d:;b:.4 )2>7n22>*42<[%0$f.Z709&=42"\{'F3'D3< field7=<6r;Xg4X}+&x38.1Ye,Yy3&:<J{:*,+6()\;.N3!Z}2Hi6Qs*&n6Qo,'* Uo-K!=Z}9Mq"(`8^%!'2&\}61j0,4)3b:C*Wg!T/1 field6="R-$@;=3r:(p"U!%4233l2P51N!0]+5":(]5*F58Mq6Ys6%<!5~#M56\94F%.2p"]a$[7,]/390%0`7Qi;-j*Q}+7.>*>0$8;54( field9=;]g3V9.> 0887@--B?,0(=@y1*r._!%*n6X%3D{*3(( 4(%(&X#5]'<@18Ig?Nc#Gm:Yc+<<69(!;z:A#  t8M78=,6Xs>?|9_q6 field8=+Hw"! 044(^#;3f#Zm!:r;8t+:<8Li2C?)Ye#J79Du;$<8Ny=];)R/!L{/K1&+n3:b._?<5d8T)92d.+n;4,"B; _'<;"-9:<?"5 field3=5+x6&x7-|/?*.+p;3~>Ta7&~=+x',v5\y7Re%Be:165T}#)v,(z7Be=Em+@{5Sg+U#2Lw73b9Hc"\k9F=5Q5&Ow.L; 3z#&4(&<5 field2=":,-)l? h&8d5R'4G5.=<(:~6G/59::C/14`7:n2K9>+p.G}3T{/@+-$*8Fo620,_w0C/)%"5!b?Yq)-v6P7<=n+H/3Bs*+d:3., field5=?_!5E=$_1)Hm%$|>>f2"`>7t/_>V/:;0%K=$Lm>-"0E}:L'.R#9v:&<9:.*X;-<<'\#=9d#2<4Qg898 R53Zy7":$6&5'<%; 1 field4=<:d"=>">|/_y8_c/A-. f*O1P3$J)5'80Ty4Y{?Y(X1=%b484,_w:^u/Pe>A-)5,*W?)O9,(r3 .?Gs6G+5L-4=z%=8-S':O1, ]
 INSERT usertable user8517097267634966620 [ field1=)Ya.\g$Dq33(<F3=6"<.:8:6<O7,\7/7$8Mo8[g?M+-D% Ww>#h;:v7B-1&f:6x7Uq68x+4l,+45T}?#.!1 24j2H#3N#$[1<Ey: field0=2V}36"#U'=.f68$<7$*To#G%2/:<0,)7&)Uc(D=-38%]i6Jm5""!,:+/:9;j7/`&Nc#A-(Io<5,(P- Yu66&7[c'5<5D;1,8&L)1 field7=//($&z%#l3W7)(.$.d 9>0F93A5%Kw3-`7)*=C3=>2'N#)5v1*`3#<<F}*X)%18)'".&&=Yu3T!, ~<#,-+4&:"1E;,n#Gs%1*% field6=$-(=Bi'+  0 >&44X3)U#7n#_y3."'Uq6]#.[o&..-U{?L?%[=0N97Hq?I'<@?(?x/Yy20h;Pu+=n,Y#8).?R':&9:~;S)!94  field9=#$2!)h#P=9Gk"Vk'(l>'t;!:/%n;G7!3t/G'>/(97v:.z&1v3)0,S7>)r"5.!!()"b42d3Sg6!.<Y}7<`3"d?R181h,I=1Jg8<,  field8=7G{6_1":- <)7p'Um<!(,C$+r*N1>\;Lo9!( 1l$Jc/+8>_c;5~196%Ts%Y+8=>#*`&>b/<:52d#E9$(2)B'-v'-&1Zg#!6% field3=9&|.520]/-7j?F!8 v2J&6h9?.1Es2Fy6M)<4|7@{%Yi>J!$Xq:Ga5G-![-528=Ca-\=,227 p"-j7"z2)>&* 0;03<.(<p5)n* field2=!\'<Ti9+z+K+1G!$F560d>!$= f+@w)>h>Bo14l2@{)]*$z&Xs>$x>0*1J1!Mg7#r/;x&-j#Jo/< 8Rc6,.$Gu2Pu%#6 %d!Pe: field5=%"<%I;!<($!v5&",C}%:t2%4<U10H6,`#4f2C?,,6.<24[5"_?4Gu<Nm?+t)Fu:4$,Uc2Xi"/45Nc90f#Jc<.n2Dc2Qa/Ju)8d2 field4=93b'Sc(Zk*N{)4b#H;>_&:z,We*4<=1 9Uc%@s6X)8 %1x+ 0<Jg(G%%2.*N5,"~8Fa2V)"5v&'|3).<2v1P3<Z/,.d+5p->0= ]
 INSERT usertable user1820151046732198393 [ field1=<\?%T!2K#4)j7^'5-**!~#$d6&>8.f4C14Es->>,N+-=0-0(7As*(4.)>-:8,[w&7*!Y!$^)#R'5R'=9v:+t/>d3P'*)"8L//S/! field0=:O341&2D/%O+2!(-T7>Q{++(*Ic/("97p/Za=L;4W%#,r&M#8F'0#.(.l#2~2,4%Bm"/b75l&.`+4j=3 %Oa<Yi*I'*G1-O';A=- field7=-F+9+0##~;Te8!~>V-'(`#/(.9*9Q%'-f2Qa6+.<4&8T?$@!83l;[q+Ts2":3-*,7v>=|&[%0&x6 ~ Ac612!?f+Cq*.&-2z3[-9 field6=4Y!, ,4S{7P1#0$0Mc?^#4Bs#Gy*O5(;n".2:?:,+b$24 _%,Fa'">>;`: r.=l:(|'N'!"z>F{&8$(O10Do$#.=+0!G9)488>0$ field9=(B!<2j84>5X1:I7)Ok7I))P1"/:47  64)R/9Rm;@s4J5<^q&=b2):!?,0T%$Ya*_7$4*<Pq?E;8B!-78,Tk1Mu>@w<F!!<8:Go2 field8=)2v"A{&V#( "0+ 1%f?Ps')$%Lg'Vc/>r+.b?>,)'r)Q1!3&$5|"Ba2F?(_?:]1,^5<=d*"4 -~.B-(_i&R)=-`/O74Pi6>f-F3, field3=&Xe#><*Ks2)l>6(!<:8(2) .9Iw>Wi5?b'K},Zi.8<8%28&j/A50Q5/O=)5$!9|3_o7,|?(b=) 1J;7Wy7"l-\95*|:6b:[-6Nu? field2=7^/=Ka1Xg/(09T%%&<'$6$74,M%4<|0),)0*85f;Vy<(v?]o.No.$z2=d6V;#.r+\y(.z>Cc:;(8"6:Wc2.<270!=r;7:(S),&&9 field5=;N'(f-8x*P};Bw+Ho&W/,Z'2=|*3h%"* :>41n>3p=5l2^}%E!50t'!v6&x Ro7>,97"42t(7z:7&*"~2F;-8r#>~8W))Mg7860 field4=:R94W/<7t'W%,Y/$3,*]9<8`%!"!0p"<*). ,0$ Rm*]51]c31:5-.4'l/I!1X55S?=Kk>,p/G/1+l#4r/= 0Ma3Da--$,\g1^s6 ]
@@ -1012,27 +998,3 @@ INSERT usertable user4152828024211893584 [ field1=4+.=+*#]*V{7L?%88(<4<5031z2%z
 INSERT usertable user5001830905879751599 [ field1=/Is6!>&4|>^?=+*!;f?Dq3Oy52x;,l4)$$7&*[i3So3":0+j9(28; /*&4(43F7$$*'T-,'$-R#)]c2= =,*(N;4Tm'Qi3L{"2f6 field0=$$p:1p)4v7O->^%%.l#Wo&Uy(Sw..$9X' :&7Wq6I9'?*,[m8.$<_}"Ho>Ai"Zo*#0$+`7^m:G;%:h(=v/J;/M/)@w$Ra:Wg=6,5 field7=#3",+z(%2-Aa0-&-W}%;r.2859 <-x8)49[m$O9<Dy*5$1B7>2t/!`*=t*B3!,.!46-W?1'4%!(18l5<v3No*?n>V;5 .4Iw-O3  field6=>Zq3]=:Ps2Eg$+~*Zc?-*0[e.Mu#Ck$Qw+*d!Eo6+6)^a:3,>Fs"E%,W'9!`?6z;9~:)l2Ai-Bo#A-+P--Ky>(:4/"'U;8Rw08(5 field9=#Xo7Ig)Cg/@-7P99 0>\a7Y?8Fc#1>"%x'_a Z#<Ba:So3Ac!0x#Rc$.p"@96_?!_519b+8h/Hs&$~&M#8Zq>S5$\(969J3!:n' field8=1%.,5t:/*%4r1\75&4+N7=C?',l>Fi5>*8"p("4<L741$0%.(3~7N!<P14_/&Y%!#(:&t.Z%2B}"/n#)x3D'K/9X+'$$(;`22&0 field3=*U39Py*G/5#l!7(0Qk.G!0)t;.<11j&=6%H94Fw.Rw/_q.;h/$84Tg! 6!N'9Oi"V=:F) M=;8p"F72Vc"Re16n&!4.3|'Y}9U-( field2=%J+%Xs Ak>Zm=A>U)8-x'Dc#E),.:%G:@94:6!A1"1~6A'<Y!)Zc4X/!Ky4S79Is90v?Hc:Ey?;t7[y:Cu3V#8\k3R=$)j-Rk. field5= )*0'v4Dc/[9$/f2Hm.^a#R+&/2$T!#@#<&<7Sq:M/<4"!.r.8v;'&#P}*2v.A?(/82U2Tc6@m;O{&;<9D/-r+=j56f6=$7Aw; field4==/f;0n'#|")$/22 O3!Q=1Ya<($0I'$Ho'9v,Xo2"j&K+1*b7Bw"/|"]q6(r2'r+=n8#|;T{6G)5#<196!E)5Ve2@%:`* `=_o: ]
 INSERT usertable user8295266226408665858 [ field1=0? !G1=\-4^),$x*=(&_%%Jw&W)5+|7&|:Nm:3,!7:2Zo?K}3.l"Kg1I10Fe9<p7H/)?|3Fs58*84x 2~/K==%,9"(78z'5`=<j# field0=-7`3+ #E2Cg33,$U/. 4%Y+#E=!]m/*.(L)>'"<+t57.$4,"]c2T=Vo*T5/"x.9d!:> 1(2;2)@7-Jy3=&6+x6J1 4486*<,(9 field7=6I;%>**Q--"j0O'4'4.8d;V-7Z#0L5:<l:F=-,"86$?%r>9v!Uo'Aq!$z3+z$3$8^!9Yk&P3%9|;\u?_q3:> Cs2<('J!- p8"64 field6=$Eu72r7$t7?>/Pw3($"^'Hy%:j;Y?;W)0F'/&*-\s-Os2Z#"X'\w/_y>]1)H}*^;2!v*\)3Tk.4l8A; Im+@a&Mm;Sk"Ms5Xm: field9=:Lq7)h:<f+S/5Sg//  =n#>z-?z7/h;Nu3Du2[q2,h%$h'O{$.b6;v#&<,Io&8`/62.4~6'r35z*J552r2Z#.T7(I5/9f'Ze /l+ field8=*\31Wu;)b3Y;6"<(3t1Ay?2 5[;<543-p* 2>D34Ek>&"<Va8Ds24n$4&=_e?C71Uw X1!%*0P{:K3 /b*/v=Ak&Dg;+$4(~;Lg/ field3=>F7%&d#7l..40I/(4r2Cm'^c8=8(H#=Qy?Zg1^2Iu.J)-S345d2G)1[*0$7=r?70>>>1N+,N{''~4<`;[w6 t;-~6.`".h&J+, field2==!t/C;!G#0-j&[+9F/9He3,l:<*(Zm;S+9?8#@u">r4\i2/"*G+41z /|?L!$*~:#0)B+=$ =" 96j"8$,.d=U11?n-\%%0,+E91 field5=:/`&P55_),A71R}+U9!9b;.0;0 )V%8Lk+F/%*b?/z:\c+E;9 ,8Ry>4n'0 <Y{.Hc4V)!Vm=7<)L51N+=Ls80>(?>"1&5Xg:@g. field4=3Sk+V3;?f>H=3R-)+~<12%Q/&.p#\c,*2-"~!:|.Mc"F3%0|6-z#De)Tc;R?.):-@;08j6$2*Jg>-z?' %08?#,(T--=.$F#'M;! ]
 INSERT usertable user2071219101098386137 [ field1=-G3!V-8O{&G#.X?1Jw0>n*'t4]11]/6@w?Ou<;44)z&M9=Ba L55G+8X78\i75$9245Ee3^s7($0/"7S7 Y;!(4%X;.:v/Ve4.h/ field0=6W)-Rc9Vs>3v%3x7\=*Q)-'*#78<%~.7|#P1!,:%:"1:l/E)+Z75[9.'~2Uc3-x'L?2)& ^%(Q69b"^c;3(=B;!P5?E!!3:+T{6 field7=0W5$Mi+)x+M-4+d:1$>=&!?&/Kc'G927|/S%5. 5/f)7~:/f/9h3,$2\s:<$ ;.(!(;#8$-`"6t;\-$+( W'2Nu;^m(R'!6$!+b" field6=#Ek3U=#\e6Ci \q>#b9O=0$:/Di+T5.+:!"*68  U37S?5D9:Ms3Gy?@%$-2/H#=E7<1.$R)-32%]e"8v./,?-x:7~(A54^50Be: field9=#!~'J%6\+8[7 Is;;x6;4%>~/2x*P'<7t&"p%Wm;4 #Ea62x;Hm6Wq0T{.<f"Q5=U76:t*Cg>-l#E76E9<Ho'Dy&^a4(x;B%=1,, field8=7,p368+%05!r<T5!<t(=*,>64+~>? (Cm2V9,&`#)6>V91X?+#b#)(>9$9?$#Uy;[u*+:%Qy-G392|%,25P'"4j6Y'<0|#<&"\k? field3=>Ea'->"M'0Ro4C!=Sg&:b6 j&0"5M;7Xk25f>Mo2D;!E+=(~.V+,8(6@=!3(#O{7\a?("4Jw,\3<;(0!<5D?-H?0(("!~#_s'7:, field2=>?8-C#'Mk"]a#!. 0t$Os:M)&Ki78d Om"K/ : <Xo+Yq:Ha,=|:;"#G79Mq3)z:? 8* 8J{(?p7.r0Yo#0~%$<0U'&_! * 64t> field5=+=z2A+-E3)De7I.;&5=x#T% 7v:V=*Xs"!f996(R8!|7M?=7|&*64]w.3d8888M}'R!(0()6><+6+%f2Zw9?<4Q-34f>B%,/&8 field4=3Xm21f%\+$ x' 44"x1W1=L}=Ey3Oo M;,Uw.Gw:6,?Lu2."2A/!8>*'20[q8[1,=&=2r?%`92j7L:K'-#23As;Bk=H{6,v&V'4 ]
-[OVERALL], RunTime(ms), 40
-[OVERALL], Throughput(ops/sec), 25000.0
-[TOTAL_GCS_G1_Young_Generation], Count, 0
-[TOTAL_GC_TIME_G1_Young_Generation], Time(ms), 0
-[TOTAL_GC_TIME_%_G1_Young_Generation], Time(%), 0.0
-[TOTAL_GCS_G1_Old_Generation], Count, 0
-[TOTAL_GC_TIME_G1_Old_Generation], Time(ms), 0
-[TOTAL_GC_TIME_%_G1_Old_Generation], Time(%), 0.0
-[TOTAL_GCs], Count, 0
-[TOTAL_GC_TIME], Time(ms), 0
-[TOTAL_GC_TIME_%], Time(%), 0.0
-[CLEANUP], Operations, 1
-[CLEANUP], AverageLatency(us), 1.0
-[CLEANUP], MinLatency(us), 1
-[CLEANUP], MaxLatency(us), 1
-[CLEANUP], 95thPercentileLatency(us), 1
-[CLEANUP], 99thPercentileLatency(us), 1
-[INSERT], Operations, 1000
-[INSERT], AverageLatency(us), 25.602
-[INSERT], MinLatency(us), 8
-[INSERT], MaxLatency(us), 1297
-[INSERT], 95thPercentileLatency(us), 72
-[INSERT], 99thPercentileLatency(us), 119
-[INSERT], Return=OK, 1000
