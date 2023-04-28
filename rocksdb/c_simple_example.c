@@ -68,8 +68,8 @@ int main(int argc, char **argv)
     char *returned_value =
         rocksdb_get(db, readoptions, key, strlen(key), &len, &err);
     assert(!err);
-    assert(strcmp(returned_value, "value") == 0);
-    print("Get('%s') = '%s'\n", key, returned_value);
+    assert(strcmp(returned_value, "value598SS") == 0);
+    printf("Get('%s') = '%s'\n", key, returned_value);
     free(returned_value);
 
     // create new backup in a directory specified by DBBackupPath
