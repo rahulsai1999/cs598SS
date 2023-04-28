@@ -6,7 +6,6 @@
  *  - Insert, lookup and iterator interfaces
  *  - Close and reopen a SplinterDB db (instance)
  */
-
 #include <stdio.h>
 #include <string.h>
 
@@ -77,7 +76,7 @@ int main()
     fruit = "Oranges";
     key = slice_create((size_t)strlen(fruit), fruit);
     rc = splinterdb_lookup(spl_handle, key, &result);
-    rc = splinterdb_lookup_result_value(&result, &value);
+    rc = splinterdb_lookup_result_value(spl_handle, &result, &value);
     if (!rc)
     {
         printf("Found key: '%s', value: '%.*s'\n",
@@ -90,7 +89,7 @@ int main()
     fruit = "Bananas";
     key = slice_create((size_t)strlen(fruit), fruit);
     rc = splinterdb_lookup(spl_handle, key, &result);
-    rc = splinterdb_lookup_result_value(&result, &value);
+    rc = splinterdb_lookup_result_value(spl_handle, &result, &value);
     if (rc)
     {
         printf("Key: '%s' not found. (rc=%d)\n", fruit, rc);
