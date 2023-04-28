@@ -46,13 +46,13 @@ int main(int argc, char **argv)
 #endif
 
     FILE *file;
-    char *filename = "outWorkloadA.txt";  // Replace with your desired file name
-    char line[1500];                      // Buffer to store each line read from the file
+    char *filename = "outWorkloadA.txt"; // Replace with your desired file name
+    char line[1500];                     // Buffer to store each line read from the file
 
-    char command[10];                     // Buffer to store the command
-    char table_name[20];                  // Buffer to store the table name
-    char key[100];                        // Buffer to store the key
-    char value[1300];                     // Buffer to store the value
+    char command[10];    // Buffer to store the command
+    char table_name[20]; // Buffer to store the table name
+    char key[100];       // Buffer to store the key
+    char value[1300];    // Buffer to store the value
 
     // Open the file
     file = fopen(filename, "r");
@@ -112,7 +112,6 @@ int main(int argc, char **argv)
 
     // cleanup
     rocksdb_writeoptions_destroy(writeoptions);
-    rocksdb_readoptions_destroy(readoptions);
     rocksdb_options_destroy(options);
     rocksdb_backup_engine_close(be);
     rocksdb_close(db);
