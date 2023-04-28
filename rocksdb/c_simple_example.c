@@ -25,6 +25,11 @@ const char DBPath[] = "/tmp/rocksdb_c_simple_example";
 const char DBBackupPath[] = "/tmp/rocksdb_c_simple_example_backup";
 #endif
 
+void parse_line(const char *line, char *command, char *table_name, char *key, char *value)
+{
+    sscanf(line, "%s %s %[^[][ field1=%[^field]]]", command, table_name, key, value);
+}
+
 int main(int argc, char **argv)
 {
     rocksdb_t *db;
@@ -39,6 +44,26 @@ int main(int argc, char **argv)
 #else
     long cpus = sysconf(_SC_NPROCESSORS_ONLN);
 #endif
+
+    FILE *file;
+    char *filename = "outWorkloadA.txt";  // Replace with your desired file name
+    char line[1500];                      // Buffer to store each line read from the file
+
+    char command[10];                     // Buffer to store the command
+    char table_name[20];                  // Buffer to store the table name
+    char key[100];                        // Buffer to store the key
+    char value[1300];                     // Buffer to store the value
+
+    // Open the file
+    file = fopen(filename, "r");
+
+    // Check if the file was opened successfully
+    if (file == NULL)
+    {
+        fprintf(stderr, "Error: Unable to open file %s\n", filename);
+        return 1;
+    }
+
     // Set # of online cores
     rocksdb_options_increase_parallelism(options, (int)(cpus));
     rocksdb_options_optimize_level_style_compaction(options, 0);
@@ -55,22 +80,19 @@ int main(int argc, char **argv)
     assert(!err);
 
     // Put key-value
+    // Read the file line by line
     rocksdb_writeoptions_t *writeoptions = rocksdb_writeoptions_create();
-    const char key[] = "key598SS";
-    const char *value = "value598SS";
-    rocksdb_put(db, writeoptions, key, strlen(key), value, strlen(value) + 1,
-                &err);
-    assert(!err);
+    while (fgets(line, sizeof(line), file) != NULL)
+    {
+        parse_line(line, command, table_name, key, value);
+        printf("%s %s %s %s \n", command, table_name, key, value);
+        rocksdb_put(db, writeoptions, key, strlen(key), value, strlen(value) + 1,
+                    &err);
+        assert(!err);
+    }
 
-    // Get value
-    rocksdb_readoptions_t *readoptions = rocksdb_readoptions_create();
-    size_t len;
-    char *returned_value =
-        rocksdb_get(db, readoptions, key, strlen(key), &len, &err);
-    assert(!err);
-    assert(strcmp(returned_value, "value598SS") == 0);
-    printf("Get('%s') = '%s'\n", key, returned_value);
-    free(returned_value);
+    // const char key[] = "key598SS";
+    // const char *value = "value598SS";
 
     // create new backup in a directory specified by DBBackupPath
     rocksdb_backup_engine_create_new_backup(be, db, &err);
@@ -94,6 +116,7 @@ int main(int argc, char **argv)
     rocksdb_options_destroy(options);
     rocksdb_backup_engine_close(be);
     rocksdb_close(db);
+    fclose(file);
 
     return 0;
 }
