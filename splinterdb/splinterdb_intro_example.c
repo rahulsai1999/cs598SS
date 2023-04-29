@@ -6,6 +6,7 @@
  *  - Insert, lookup and iterator interfaces
  *  - Close and reopen a SplinterDB db (instance)
  */
+
 #include <stdio.h>
 #include <string.h>
 
@@ -19,12 +20,11 @@
 /* Application declares the limit of key-sizes it intends to use */
 #define USER_MAX_KEY_SIZE ((int)100)
 
-/*
- * -------------------------------------------------------------------------------
- * We, intentionally, do not check for errors or show error handling, as this is
- * mostly a sample program to illustrate how-to use the APIs.
- * -------------------------------------------------------------------------------
- */
+void parse_line(const char *line, char *command, char *table_name, char *key, char *value)
+{
+    sscanf(line, "%s %s %[^[][ field1=%[^field]]]", command, table_name, key, value);
+}
+
 int main()
 {
     printf("     **** SplinterDB Basic example program ****\n\n");
@@ -46,92 +46,60 @@ int main()
     int rc = splinterdb_create(&splinterdb_cfg, &spl_handle);
     printf("Created SplinterDB instance, dbname '%s'.\n\n", DB_FILE_NAME);
 
-    // Insert a few kv-pairs, describing properties of fruits.
-    const char *fruit = "Apples";
-    const char *descr = "Apples are known for their fiber and antioxidants";
-    slice key = slice_create((size_t)strlen(fruit), fruit);
-    slice value = slice_create((size_t)strlen(descr), descr);
+    FILE *file;
+    char *filename = "outWorkloadA.txt"; // Replace with your desired file name
+    char line[1500];                     // Buffer to store each line read from the file
 
-    rc = splinterdb_insert(spl_handle, key, value);
-    printf("Inserted key '%s'\n", fruit);
+    char command[10];    // Buffer to store the command
+    char table_name[20]; // Buffer to store the table name
+    char key[100];       // Buffer to store the key
+    char value[1300];    // Buffer to store the value
 
-    fruit = "Oranges";
-    descr = "Oranges provide an excellent source of vitamin C";
-    key = slice_create((size_t)strlen(fruit), fruit);
-    value = slice_create((size_t)strlen(descr), descr);
-    rc = splinterdb_insert(spl_handle, key, value);
-    printf("Inserted key '%s'\n", fruit);
+    // Open the file
+    file = fopen(filename, "r");
 
-    fruit = "Mangoes";
-    descr = "Mangoes are packed with vitamin A and antioxidants";
-    key = slice_create((size_t)strlen(fruit), fruit);
-    value = slice_create((size_t)strlen(descr), descr);
-    rc = splinterdb_insert(spl_handle, key, value);
-    printf("Inserted key '%s'\n", fruit);
+    // Check if the file was opened successfully
+    if (file == NULL)
+    {
+        fprintf(stderr, "Error: Unable to open file %s\n", filename);
+        return 1;
+    }
+
+    while (fgets(line, sizeof(line), file) != NULL)
+    {
+        parse_line(line, command, table_name, key, value);
+        slice key = slice_create((size_t)strlen(key), key);
+        slice value = slice_create((size_t)strlen(value), value);
+        rc = splinterdb_insert(spl_handle, key, value);
+        printf("Inserted key '%s'\n", key);
+    }
 
     // Retrieve a key-value pair.
     splinterdb_lookup_result result;
     splinterdb_lookup_result_init(spl_handle, &result, 0, NULL);
 
-    fruit = "Oranges";
+    slice value;
+    const char *fruit = "user412164360235391016"; // random key from workload
     key = slice_create((size_t)strlen(fruit), fruit);
     rc = splinterdb_lookup(spl_handle, key, &result);
     rc = splinterdb_lookup_result_value(spl_handle, &result, &value);
     if (!rc)
     {
-        printf("Found key: '%s', value: '%.*s'\n",
-               fruit,
+        printf("Found key: '%s', value: '%.*s'\n", fruit,
                (int)slice_length(value),
                (char *)slice_data(value));
     }
 
-    // Handling non-existent keys
-    fruit = "Bananas";
-    key = slice_create((size_t)strlen(fruit), fruit);
-    rc = splinterdb_lookup(spl_handle, key, &result);
-    rc = splinterdb_lookup_result_value(spl_handle, &result, &value);
-    if (rc)
-    {
-        printf("Key: '%s' not found. (rc=%d)\n", fruit, rc);
-    }
-    printf("\n");
-
+    // making sure it is consistent
     printf("Shutdown and reopen SplinterDB instance ...\n");
     splinterdb_close(&spl_handle);
 
     rc = splinterdb_open(&splinterdb_cfg, &spl_handle);
     if (rc)
     {
-        printf("Error re-opening SplinterDB instance, dbname '%s' (rc=%d).\n",
-               DB_FILE_NAME,
-               rc);
+        printf("Error re-opening SplinterDB instance, dbname '%s' (rc=%d).\n", DB_FILE_NAME, rc);
         return (rc);
     }
-
-    // Retrieve all the key-value pairs from the database
-    printf("Iterate through all the key-value pairs"
-           " returning keys in lexicographic sort order:\n");
-
-    splinterdb_iterator *it = NULL;
-    rc = splinterdb_iterator_init(spl_handle, &it, NULL_SLICE);
-
-    int i = 0;
-    for (; splinterdb_iterator_valid(it); splinterdb_iterator_next(it))
-    {
-        slice key, value;
-        splinterdb_iterator_get_current(it, &key, &value);
-        printf("  [%d] key='%.*s', value='%.*s'\n",
-               i,
-               (int)slice_length(key),
-               (char *)slice_data(key),
-               (int)slice_length(value),
-               (char *)slice_data(value));
-        i++;
-    }
-    rc = splinterdb_iterator_status(it);
-    splinterdb_iterator_deinit(it);
-
-    printf("Found %d key-value pairs\n\n", i);
 
     splinterdb_close(&spl_handle);
     printf("Shutdown SplinterDB instance, dbname '%s'.\n\n", DB_FILE_NAME);
