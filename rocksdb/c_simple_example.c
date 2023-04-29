@@ -85,14 +85,19 @@ int main(int argc, char **argv)
     while (fgets(line, sizeof(line), file) != NULL)
     {
         parse_line(line, command, table_name, key, value);
-        printf("%s %s %s %s \n", command, table_name, key, value);
         rocksdb_put(db, writeoptions, key, strlen(key), value, strlen(value) + 1,
                     &err);
+        printf("Inserted key '%s'\n", key);
         assert(!err);
     }
 
-    // const char key[] = "key598SS";
-    // const char *value = "value598SS";
+    size_t len;
+    const char key[] = "user412164360235391016";
+    rocksdb_readoptions_t *readoptions = rocksdb_readoptions_create();
+    char *returned_value = rocksdb_get(db, readoptions, key, strlen(key), &len, &err);
+    assert(!err);
+    assert(strcmp(returned_value, "value") == 0);
+    free(returned_value);
 
     // create new backup in a directory specified by DBBackupPath
     rocksdb_backup_engine_create_new_backup(be, db, &err);
