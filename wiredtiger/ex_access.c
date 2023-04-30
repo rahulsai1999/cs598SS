@@ -10,8 +10,10 @@ void parse_line(const char *line, char *command, char *table_name, char *key, ch
     sscanf(line, "%s %s %[^[][ field1=%[^field]]]", command, table_name, key, value);
 }
 
-void access_example(void)
+int main(int argc, char *argv[])
 {
+    home = example_setup(argc, argv);
+
     /*! [access example connection] */
     WT_CONNECTION *conn;
     WT_CURSOR *cursor;
@@ -86,13 +88,6 @@ void access_example(void)
     /*! [access example close] */
     error_check(conn->close(conn, NULL)); /* Close all handles. */
                                           /*! [access example close] */
-}
-
-int main(int argc, char *argv[])
-{
-    home = example_setup(argc, argv);
-
-    access_example();
 
     return (EXIT_SUCCESS);
 }
