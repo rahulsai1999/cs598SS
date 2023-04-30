@@ -27,7 +27,7 @@ const char DBBackupPath[] = "/tmp/rocksdb_c_simple_example_backup";
 
 void parse_line(const char *line, char *command, char *table_name, char *key, char *value)
 {
-    sscanf(line, "%s %s %[^[][ field1=%[^field]]]", command, table_name, key, value);
+    sscanf(line, "%6s %s %[^[][ field1=%[^ ]]", command, table_name, key, value);
 }
 
 int main(int argc, char **argv)
@@ -85,10 +85,12 @@ int main(int argc, char **argv)
     while (fgets(line, sizeof(line), file) != NULL)
     {
         parse_line(line, command, table_name, key, value);
-        rocksdb_put(db, writeoptions, key, strlen(key), value, strlen(value) + 1,
-                    &err);
-        printf("Inserted key '%s'\n", key);
-        assert(!err);
+        if (strcmp(command, "INSERT") != 0)
+        {
+            rocksdb_put(db, writeoptions, key, strlen(key), value, strlen(value) + 1,
+                        &err);
+            assert(!err);
+        }
     }
 
     size_t len;

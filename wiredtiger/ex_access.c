@@ -44,11 +44,14 @@ int main(int argc, char *argv[])
 
     while (fgets(line, sizeof(line), file) != NULL)
     {
-        sscanf(line, "%s %s %[^[][ field1=%[^field]]]", command, table_name, rkey, rvalue);
-        cursor->set_key(cursor, rkey); /* Insert a record. */
-        cursor->set_value(cursor, rvalue);
-        error_check(cursor->insert(cursor));
-        printf("Inserted key '%s'\n", rkey);
+        sscanf(line, "%6s %s %[^[][ field1=%[^ ]]", command, table_name, rkey, rvalue);
+        if (strcmp(command, "INSERT") == 0)
+        {
+            cursor->set_key(cursor, rkey); /* Insert a record. */
+            cursor->set_value(cursor, rvalue);
+            error_check(cursor->insert(cursor));
+            printf("Inserted key '%s'\n", rkey);
+        }
     }
 
     error_check(cursor->reset(cursor));

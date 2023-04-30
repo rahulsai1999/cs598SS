@@ -22,7 +22,7 @@
 
 void parse_line(const char *line, char *command, char *table_name, char *key, char *value)
 {
-    sscanf(line, "%s %s %[^[][ field1=%[^field]]]", command, table_name, key, value);
+    sscanf(line, "%6s %s %[^[][ field1=%[^ ]]", command, table_name, key, value);
 }
 
 int main()
@@ -68,10 +68,12 @@ int main()
     while (fgets(line, sizeof(line), file) != NULL)
     {
         parse_line(line, command, table_name, key, value);
-        slice skey = slice_create((size_t)strlen(key), key);
-        slice svalue = slice_create((size_t)strlen(value), value);
-        rc = splinterdb_insert(spl_handle, skey, svalue);
-        printf("Inserted key '%s'\n", key);
+        if (strcmp(command, "INSERT") == 0)
+        {
+            slice skey = slice_create((size_t)strlen(key), key);
+            slice svalue = slice_create((size_t)strlen(value), value);
+            rc = splinterdb_insert(spl_handle, skey, svalue);
+        }
     }
 
     // Retrieve a key-value pair.
