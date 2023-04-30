@@ -85,7 +85,7 @@ int main(int argc, char **argv)
     while (fgets(line, sizeof(line), file) != NULL)
     {
         parse_line(line, command, table_name, key, value);
-        if (strcmp(command, "INSERT") != 0)
+        if (strcmp(command, "INSERT") == 0)
         {
             rocksdb_put(db, writeoptions, key, strlen(key), value, strlen(value) + 1,
                         &err);
