@@ -9,6 +9,10 @@ int main(int argc, char *argv[])
 {
     home = example_setup(argc, argv);
 
+    WT_CONNECTION *conn = NULL;
+    WT_CURSOR *cursor = NULL;
+    WT_SESSION *session = NULL;
+
     /*! [access example connection] */
     const char *key, *value;
 
@@ -32,11 +36,9 @@ int main(int argc, char *argv[])
     }
 
     /* Open a connection to the database, creating it if necessary. */
-    WT_CONNECTION *conn;
     error_check(wiredtiger_open(home, NULL, "create,statistics=(all)", &conn));
 
     /* Open a session handle for the database. */
-    WT_SESSION *session;
     error_check(conn->open_session(conn, NULL, NULL, &session));
     /*! [access example connection] */
 
@@ -45,7 +47,6 @@ int main(int argc, char *argv[])
     /*! [access example table create] */
 
     /*! [access example cursor open] */
-    WT_CURSOR *cursor;
     error_check(session->open_cursor(session, "table:access", NULL, NULL, &cursor));
     /*! [access example cursor open] */
 
@@ -60,26 +61,13 @@ int main(int argc, char *argv[])
 
     error_check(cursor->reset(cursor));
 
-    char *skey;
-    skey = "user412164360235391016 ";
+    const char *skey = "user412164360235391016 ";
     cursor->set_key(cursor, skey);
     error_check(cursor->search(cursor));
 
     error_check(cursor->get_key(cursor, &key));
     error_check(cursor->get_value(cursor, &value));
     printf("Got record: %s : %s\n", key, value);
-
-    /*! [access example cursor list] */
-    // error_check(cursor->reset(cursor)); /* Restart the scan. */
-    // while ((ret = cursor->next(cursor)) == 0)
-    // {
-    //     error_check(cursor->get_key(cursor, &key));
-    //     error_check(cursor->get_value(cursor, &value));
-
-    //     printf("Got record: %s : %s\n", key, value);
-    // }
-    // scan_end_check(ret == WT_NOTFOUND); /* Check for end-of-table. */
-    // /*! [access example cursor list] */
 
     /*! [access example close] */
     error_check(conn->close(conn, NULL)); /* Close all handles. */
