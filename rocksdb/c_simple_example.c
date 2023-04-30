@@ -89,6 +89,7 @@ int main(int argc, char **argv)
         {
             rocksdb_put(db, writeoptions, key, strlen(key), value, strlen(value) + 1,
                         &err);
+            printf("Inserted key '%s'\n", key);
             assert(!err);
         }
     }

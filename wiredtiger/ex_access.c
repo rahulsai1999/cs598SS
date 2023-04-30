@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
             cursor->set_key(cursor, rkey); /* Insert a record. */
             cursor->set_value(cursor, rvalue);
             error_check(cursor->insert(cursor));
+            printf("Inserted key '%s'\n", rkey);
         }
     }
 

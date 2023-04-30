@@ -73,6 +73,7 @@ int main()
             slice skey = slice_create((size_t)strlen(key), key);
             slice svalue = slice_create((size_t)strlen(value), value);
             rc = splinterdb_insert(spl_handle, skey, svalue);
+            printf("Inserted key '%s'\n", key);
         }
     }
 
