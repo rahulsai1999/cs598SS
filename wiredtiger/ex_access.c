@@ -7,14 +7,13 @@ static const char *home;
 
 int main(int argc, char *argv[])
 {
+    FILE *file;
     WT_CONNECTION *conn = NULL;
     WT_CURSOR *cursor = NULL;
     WT_SESSION *session = NULL;
-    const char *key, *value;
+    const char *key, *value, *skey;
 
     home = example_setup(argc, argv);
-
-    FILE *file;
     const char *filename = "outWorkloadA.txt"; // Declare filename as const
     char line[1500];                           // Buffer to store each line read from the file
 
@@ -52,8 +51,7 @@ int main(int argc, char *argv[])
     }
 
     error_check(cursor->reset(cursor));
-
-    const char *skey = "user412164360235391016 ";
+    skey = "user412164360235391016 ";
     cursor->set_key(cursor, skey);
     error_check(cursor->search(cursor));
 
