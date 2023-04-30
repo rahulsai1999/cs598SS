@@ -7,18 +7,16 @@ static const char *home;
 
 int main(int argc, char *argv[])
 {
-    home = example_setup(argc, argv);
-
     WT_CONNECTION *conn = NULL;
     WT_CURSOR *cursor = NULL;
     WT_SESSION *session = NULL;
-
-    /*! [access example connection] */
     const char *key, *value;
 
+    home = example_setup(argc, argv);
+
     FILE *file;
-    char *filename = "outWorkloadA.txt"; // Replace with your desired file name
-    char line[1500];                     // Buffer to store each line read from the file
+    const char *filename = "outWorkloadA.txt"; // Declare filename as const
+    char line[1500];                           // Buffer to store each line read from the file
 
     char command[10];    // Buffer to store the command
     char table_name[20]; // Buffer to store the table name
@@ -40,15 +38,9 @@ int main(int argc, char *argv[])
 
     /* Open a session handle for the database. */
     error_check(conn->open_session(conn, NULL, NULL, &session));
-    /*! [access example connection] */
 
-    /*! [access example table create] */
-    error_check(session->create(session, "table:access", "key_format=S,value_format=S"));
-    /*! [access example table create] */
-
-    /*! [access example cursor open] */
+    /* Create a cursor for the database. */
     error_check(session->open_cursor(session, "table:access", NULL, NULL, &cursor));
-    /*! [access example cursor open] */
 
     while (fgets(line, sizeof(line), file) != NULL)
     {
@@ -69,9 +61,7 @@ int main(int argc, char *argv[])
     error_check(cursor->get_value(cursor, &value));
     printf("Got record: %s : %s\n", key, value);
 
-    /*! [access example close] */
     error_check(conn->close(conn, NULL)); /* Close all handles. */
-                                          /*! [access example close] */
 
     return (EXIT_SUCCESS);
 }
