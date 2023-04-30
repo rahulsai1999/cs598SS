@@ -11,11 +11,11 @@ int main(int argc, char *argv[])
     WT_CONNECTION *conn = NULL;
     WT_CURSOR *cursor = NULL;
     WT_SESSION *session = NULL;
-    const char *key, *value, *skey;
+    const char *key, *value, *skey, *filename;
 
     home = example_setup(argc, argv);
-    const char *filename = "outWorkloadA.txt"; // Declare filename as const
-    char line[1500];                           // Buffer to store each line read from the file
+    filename = "outWorkloadA.txt"; // Declare filename as const
+    char line[1500];               // Buffer to store each line read from the file
 
     char command[10];    // Buffer to store the command
     char table_name[20]; // Buffer to store the table name
