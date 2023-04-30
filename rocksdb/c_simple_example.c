@@ -93,7 +93,7 @@ int main(int argc, char **argv)
 
     size_t len;
     printf("Get('user412164360235391016')\n");
-    const char skey[] = "user412164360235391016";
+    const char skey[] = "user412164360235391016 ";
     rocksdb_readoptions_t *readoptions = rocksdb_readoptions_create();
     char *returned_value = rocksdb_get(db, readoptions, skey, strlen(skey), &len, &err);
     assert(!err);
