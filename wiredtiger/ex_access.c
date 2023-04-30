@@ -12,15 +12,10 @@ int main(int argc, char *argv[])
     WT_CURSOR *cursor = NULL;
     WT_SESSION *session = NULL;
     const char *key, *value, *skey, *filename;
+    char line[1500], command[10], table_name[20], rkey[100], rvalue[1300];
 
     home = example_setup(argc, argv);
     filename = "outWorkloadA.txt"; // Declare filename as const
-    char line[1500];               // Buffer to store each line read from the file
-
-    char command[10];    // Buffer to store the command
-    char table_name[20]; // Buffer to store the table name
-    char rkey[100];      // Buffer to store the key
-    char rvalue[1300];   // Buffer to store the value
 
     // Open the file
     file = fopen(filename, "r");
