@@ -32,9 +32,15 @@ int main(int argc, char *argv[])
 
     /* Open a session handle for the database. */
     error_check(conn->open_session(conn, NULL, NULL, &session));
+    /*! [access example connection] */
 
-    /* Create a cursor for the database. */
+    /*! [access example table create] */
+    error_check(session->create(session, "table:access", "key_format=S,value_format=S"));
+    /*! [access example table create] */
+
+    /*! [access example cursor open] */
     error_check(session->open_cursor(session, "table:access", NULL, NULL, &cursor));
+    /*! [access example cursor open] */
 
     while (fgets(line, sizeof(line), file) != NULL)
     {
