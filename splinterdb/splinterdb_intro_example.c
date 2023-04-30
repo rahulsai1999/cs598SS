@@ -68,9 +68,9 @@ int main()
     while (fgets(line, sizeof(line), file) != NULL)
     {
         parse_line(line, command, table_name, key, value);
-        slice key = slice_create((size_t)strlen(key), key);
-        slice value = slice_create((size_t)strlen(value), value);
-        rc = splinterdb_insert(spl_handle, key, value);
+        slice skey = slice_create((size_t)strlen(key), key);
+        slice svalue = slice_create((size_t)strlen(value), value);
+        rc = splinterdb_insert(spl_handle, skey, svalue);
         printf("Inserted key '%s'\n", key);
     }
 
@@ -79,7 +79,7 @@ int main()
     splinterdb_lookup_result_init(spl_handle, &result, 0, NULL);
 
     slice value;
-    const char *fruit = "user412164360235391016"; // random key from workload
+    const char *fruit = "user412164360235391016 "; // random key from workload
     key = slice_create((size_t)strlen(fruit), fruit);
     rc = splinterdb_lookup(spl_handle, key, &result);
     rc = splinterdb_lookup_result_value(spl_handle, &result, &value);
