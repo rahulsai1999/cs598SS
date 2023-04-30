@@ -78,10 +78,11 @@ int main()
     splinterdb_lookup_result result;
     splinterdb_lookup_result_init(spl_handle, &result, 0, NULL);
 
+    slice gkey;
     slice gvalue;
     const char *fruit = "user412164360235391016 "; // random key from workload
-    skey = slice_create((size_t)strlen(fruit), fruit);
-    rc = splinterdb_lookup(spl_handle, skey, &result);
+    gkey = slice_create((size_t)strlen(fruit), fruit);
+    rc = splinterdb_lookup(spl_handle, gkey, &result);
     rc = splinterdb_lookup_result_value(spl_handle, &result, &gvalue);
     if (!rc)
     {
