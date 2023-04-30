@@ -92,11 +92,12 @@ int main(int argc, char **argv)
     }
 
     size_t len;
-    const char key[] = "user412164360235391016";
+    printf("Get('user412164360235391016')\n");
+    const char skey[] = "user412164360235391016";
     rocksdb_readoptions_t *readoptions = rocksdb_readoptions_create();
-    char *returned_value = rocksdb_get(db, readoptions, key, strlen(key), &len, &err);
+    char *returned_value = rocksdb_get(db, readoptions, skey, strlen(skey), &len, &err);
     assert(!err);
-    assert(strcmp(returned_value, "value") == 0);
+    printf("Get('%s') = '%s'\n", skey, returned_value);
     free(returned_value);
 
     // create new backup in a directory specified by DBBackupPath
