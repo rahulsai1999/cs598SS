@@ -10,14 +10,13 @@ void parse_line(const char *line, char *command, char *table_name, char *key, ch
     sscanf(line, "%s %s %[^[][ field1=%[^field]]]", command, table_name, key, value);
 }
 
-void access_example()
+void access_example(void)
 {
     /*! [access example connection] */
     WT_CONNECTION *conn;
     WT_CURSOR *cursor;
     WT_SESSION *session;
     const char *key, *value;
-    int ret;
 
     FILE *file;
     char *filename = "outWorkloadA.txt"; // Replace with your desired file name
@@ -64,7 +63,7 @@ void access_example()
 
     error_check(cursor->reset(cursor));
 
-    const char *skey = "user412164360235391016 ";
+    char *skey = "user412164360235391016 ";
     cursor->set_key(cursor, skey);
     error_check(cursor->search(cursor));
 
