@@ -5,19 +5,11 @@
 
 static const char *home;
 
-void parse_line(const char *line, char *command, char *table_name, char *key, char *value)
-{
-    sscanf(line, "%s %s %[^[][ field1=%[^field]]]", command, table_name, key, value);
-}
-
 int main(int argc, char *argv[])
 {
     home = example_setup(argc, argv);
 
     /*! [access example connection] */
-    WT_CONNECTION *conn;
-    WT_CURSOR *cursor;
-    WT_SESSION *session;
     const char *key, *value;
 
     FILE *file;
@@ -40,9 +32,11 @@ int main(int argc, char *argv[])
     }
 
     /* Open a connection to the database, creating it if necessary. */
+    WT_CONNECTION *conn;
     error_check(wiredtiger_open(home, NULL, "create,statistics=(all)", &conn));
 
     /* Open a session handle for the database. */
+    WT_SESSION *session;
     error_check(conn->open_session(conn, NULL, NULL, &session));
     /*! [access example connection] */
 
@@ -51,12 +45,13 @@ int main(int argc, char *argv[])
     /*! [access example table create] */
 
     /*! [access example cursor open] */
+    WT_CURSOR *cursor;
     error_check(session->open_cursor(session, "table:access", NULL, NULL, &cursor));
     /*! [access example cursor open] */
 
     while (fgets(line, sizeof(line), file) != NULL)
     {
-        parse_line(line, command, table_name, rkey, rvalue);
+        sscanf(line, "%s %s %[^[][ field1=%[^field]]]", command, table_name, rkey, rvalue);
         cursor->set_key(cursor, rkey); /* Insert a record. */
         cursor->set_value(cursor, rvalue);
         error_check(cursor->insert(cursor));
@@ -65,7 +60,8 @@ int main(int argc, char *argv[])
 
     error_check(cursor->reset(cursor));
 
-    char *skey = "user412164360235391016 ";
+    char *skey;
+    skey = "user412164360235391016 ";
     cursor->set_key(cursor, skey);
     error_check(cursor->search(cursor));
 
