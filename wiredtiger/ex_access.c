@@ -1,33 +1,3 @@
-/*-
- * Public Domain 2014-present MongoDB, Inc.
- * Public Domain 2008-2014 WiredTiger, Inc.
- *
- * This is free and unencumbered software released into the public domain.
- *
- * Anyone is free to copy, modify, publish, use, compile, sell, or
- * distribute this software, either in source code form or as a compiled
- * binary, for any purpose, commercial or non-commercial, and by any
- * means.
- *
- * In jurisdictions that recognize copyright laws, the author or authors
- * of this software dedicate any and all copyright interest in the
- * software to the public domain. We make this dedication for the benefit
- * of the public at large and to the detriment of our heirs and
- * successors. We intend this dedication to be an overt act of
- * relinquishment in perpetuity of all present and future rights to this
- * software under copyright law.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
- * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
- * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- * OTHER DEALINGS IN THE SOFTWARE.
- *
- * ex_access.c
- * 	demonstrates how to create and access a simple table.
- */
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -40,7 +10,7 @@ void parse_line(const char *line, char *command, char *table_name, char *key, ch
     sscanf(line, "%s %s %[^[][ field1=%[^field]]]", command, table_name, key, value);
 }
 
-static void access_example(void)
+void access_example()
 {
     /*! [access example connection] */
     WT_CONNECTION *conn;
@@ -55,8 +25,8 @@ static void access_example(void)
 
     char command[10];    // Buffer to store the command
     char table_name[20]; // Buffer to store the table name
-    char key[100];       // Buffer to store the key
-    char value[1300];    // Buffer to store the value
+    char rkey[100];      // Buffer to store the key
+    char rvalue[1300];   // Buffer to store the value
 
     // Open the file
     file = fopen(filename, "r");
@@ -85,11 +55,11 @@ static void access_example(void)
 
     while (fgets(line, sizeof(line), file) != NULL)
     {
-        parse_line(line, command, table_name, key, value);
-        cursor->set_key(cursor, key); /* Insert a record. */
-        cursor->set_value(cursor, value);
+        parse_line(line, command, table_name, rkey, rvalue);
+        cursor->set_key(cursor, rkey); /* Insert a record. */
+        cursor->set_value(cursor, rvalue);
         error_check(cursor->insert(cursor));
-        printf("Inserted key '%s'\n", key);
+        printf("Inserted key '%s'\n", rkey);
     }
 
     error_check(cursor->reset(cursor));
