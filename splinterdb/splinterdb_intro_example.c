@@ -25,7 +25,7 @@ void parse_line(const char *line, char *command, char *table_name, char *key, ch
     sscanf(line, "%6s %s %[^[][ field0=%[^]]", command, table_name, key, value);
 }
 
-int main()
+int main(int argc, char **argv)
 {
     printf("     **** SplinterDB Basic example program ****\n\n");
 
@@ -47,8 +47,8 @@ int main()
     printf("Created SplinterDB instance, dbname '%s'.\n\n", DB_FILE_NAME);
 
     FILE *file;
-    char *filename = "outWorkloadA.txt"; // Replace with your desired file name
-    char line[1500];                     // Buffer to store each line read from the file
+    char *filename = argv[1]; // Replace with your desired file name
+    char line[1500];          // Buffer to store each line read from the file
 
     char command[10];    // Buffer to store the command
     char table_name[20]; // Buffer to store the table name
