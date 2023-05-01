@@ -21,8 +21,8 @@ const char DBPath[] = "C:\\Windows\\TEMP\\rocksdb_c_simple_example";
 const char DBBackupPath[] =
     "C:\\Windows\\TEMP\\rocksdb_c_simple_example_backup";
 #else
-const char DBPath[] = "/tmp/rocksdb_c_simple_example";
-const char DBBackupPath[] = "/tmp/rocksdb_c_simple_example_backup";
+const char DBPath[] = "rocksdb_c_simple_example";
+const char DBBackupPath[] = "rocksdb_c_simple_example_backup";
 #endif
 
 void parse_line(const char *line, char *command, char *table_name, char *key, char *value)
