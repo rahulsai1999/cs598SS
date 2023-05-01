@@ -11,4 +11,3 @@ splinterdb/splinterdb
 wiredtiger/wiredtiger
 
 ycsb/*.txt
-data/
