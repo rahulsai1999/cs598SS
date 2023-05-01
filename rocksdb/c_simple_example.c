@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 #endif
 
     FILE *file;
-    char *filename = argv[0]; // Replace with your desired file name
+    char *filename = argv[1]; // Replace with your desired file name
     char line[1500];          // Buffer to store each line read from the file
 
     char command[10];    // Buffer to store the command
