@@ -22,7 +22,7 @@
 
 void parse_line(const char *line, char *command, char *table_name, char *key, char *value)
 {
-    sscanf(line, "%6s %s %[^[][ field1=%[^ ]]", command, table_name, key, value);
+    sscanf(line, "%6s %s %[^[][ field0=%[^]]", command, table_name, key, value);
 }
 
 int main()

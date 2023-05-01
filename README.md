@@ -1,49 +1,10 @@
 # CS598SS
 
 
-## Installation/Basic Examples
+## Installation
 
-```bash
-bash install.sh
-```
-
-**Running RocksDB**
-
-1. Edit simple_example
-
-```bash
-vi simple_example.cc
-```
-
-2.    compile simple_example
-
-```bash
-make simple_example.cc
-```
-
-3.   execute simple_example
-
-```bash
-./simple_example
-```
-
-**Running WiredTiger**
-1. List commands
-``` bash
-wt
-```
-2. Creating a table
-``` bash
-wt create -c key_format=<type>,value_format=<type> <tablename>
-```
-3. Writing to a table
-``` bash
-wt write <tablename> -a <key> <value>
-```
-4. Reading from table
-``` bash
-wt read <tablename> <key>
-```
+- Run setup.sh in each folder (rocksdb, splinterdb, wiredtiger)
+- Run ycsb_setup.sh and ycsb_collate.sh
 
 ## Project Checkpoint Requirements:
 - Mount more NVME partitions on m510 and install a filesystem

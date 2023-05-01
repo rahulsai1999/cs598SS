@@ -27,7 +27,7 @@ const char DBBackupPath[] = "/tmp/rocksdb_c_simple_example_backup";
 
 void parse_line(const char *line, char *command, char *table_name, char *key, char *value)
 {
-    sscanf(line, "%6s %s %[^[][ field1=%[^ ]]", command, table_name, key, value);
+    sscanf(line, "%6s %s %[^[][ field0=%[^]]", command, table_name, key, value);
 }
 
 int main(int argc, char **argv)
