@@ -5,3 +5,7 @@
 keys/
 ycsb-0.17.0/
 ycsb-0.17.0.tar.gz
+
+rocksdb/rocksdb
+splinterdb/splinterdb
+wiredtiger/wiredtiger
