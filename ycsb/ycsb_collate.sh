@@ -1,6 +1,9 @@
 # !/bin/bash
 
+cp -r workloads ycsb-0.17.0
+
 cd ycsb-0.17.0
+
 ./bin/ycsb.sh load basic -P workloads/workloada > outWorkloadA.txt
 ./bin/ycsb.sh run basic -P workloads/workloada > outWorkloadRunA.txt
 
@@ -20,15 +23,15 @@ cd ycsb-0.17.0
 ./bin/ycsb.sh run basic -P workloads/workloadf > outWorkloadRunF.txt
 
 # Copy the results to ycsb folder
-cp outWorkloadA.txt ../ycsb
-cp outWorkloadRunA.txt ../ycsb
-cp outWorkloadB.txt ../ycsb
-cp outWorkloadRunB.txt ../ycsb
-cp outWorkloadC.txt ../ycsb
-cp outWorkloadRunC.txt ../ycsb
-cp outWorkloadD.txt ../ycsb
-cp outWorkloadRunD.txt ../ycsb
-cp outWorkloadE.txt ../ycsb
-cp outWorkloadRunE.txt ../ycsb
-cp outWorkloadF.txt ../ycsb
-cp outWorkloadRunF.txt ../ycsb
+cp outWorkloadA.txt ../
+cp outWorkloadRunA.txt ../
+cp outWorkloadB.txt ../
+cp outWorkloadRunB.txt ../
+cp outWorkloadC.txt ../
+cp outWorkloadRunC.txt ../
+cp outWorkloadD.txt ../
+cp outWorkloadRunD.txt ../
+cp outWorkloadE.txt ../
+cp outWorkloadRunE.txt ../
+cp outWorkloadF.txt ../
+cp outWorkloadRunF.txt ../
