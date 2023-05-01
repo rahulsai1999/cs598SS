@@ -46,8 +46,8 @@ int main(int argc, char **argv)
 #endif
 
     FILE *file;
-    char *filename = "outWorkloadA.txt"; // Replace with your desired file name
-    char line[1500];                     // Buffer to store each line read from the file
+    char *filename = argv[0]; // Replace with your desired file name
+    char line[1500];          // Buffer to store each line read from the file
 
     char command[10];    // Buffer to store the command
     char table_name[20]; // Buffer to store the table name

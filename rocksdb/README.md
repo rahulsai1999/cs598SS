@@ -1,5 +1,2 @@
-Copy the `c_simple_example.c` to examples directory
-```
-make c_simple_example
-./c_simple_example
-```
+`sudo bash run.sh workloadA.txt`
+`sudo bash clean.sh workloadA.txt`
