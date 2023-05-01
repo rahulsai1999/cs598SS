@@ -14,8 +14,8 @@
 #include "splinterdb/splinterdb.h"
 
 #define DB_FILE_NAME "splinterdb_intro_db"
-#define DB_FILE_SIZE_MB 8196 // Size of SplinterDB device; Fixed when created
-#define CACHE_SIZE_MB 2048   // Size of cache; can be changed across boots
+#define DB_FILE_SIZE_MB 1500 // Size of SplinterDB device; Fixed when created
+#define CACHE_SIZE_MB 512   // Size of cache; can be changed across boots
 
 /* Application declares the limit of key-sizes it intends to use */
 #define USER_MAX_KEY_SIZE ((int)100)
