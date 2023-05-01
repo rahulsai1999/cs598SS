@@ -4,7 +4,7 @@
 
 void parse_line(const char *line, char *command, char *table_name, char *key, char *value)
 {
-    sscanf(line, "%6s %s %[^[][ field1=%[^ ]]", command, table_name, key, value);
+    sscanf(line, "%6s %s %[^[][ field0=%[^]]", command, table_name, key, value);
 }
 
 int main()
@@ -33,7 +33,7 @@ int main()
     {
         parse_line(line, command, table_name, key, value);
         if (strcmp(command, "INSERT") == 0)
-            printf("%s %s \n", key, value);
+            printf("%s %s %s \n", command, key, value);
     }
 
     // Close the file
