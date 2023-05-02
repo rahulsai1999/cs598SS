@@ -2,7 +2,7 @@
 
 workloadName=$1
 
-rm wiredtiger/build/examples/c/ex_access/
+rm wiredtiger/build/examples/c/ex_access/$workloadName
 rm -rf wiredtiger/build/examples/c/WT_HOME
 
 mkdir ../data/wiredtiger/$workloadName
