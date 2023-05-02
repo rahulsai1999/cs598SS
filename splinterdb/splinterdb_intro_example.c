@@ -14,8 +14,8 @@
 #include "splinterdb/splinterdb.h"
 
 #define DB_FILE_NAME "splinterdb_intro_db"
-#define DB_FILE_SIZE_MB 1500 // Size of SplinterDB device; Fixed when created
-#define CACHE_SIZE_MB 512   // Size of cache; can be changed across boots
+#define DB_FILE_SIZE_MB 2000 // Size of SplinterDB device; Fixed when created
+#define CACHE_SIZE_MB 512    // Size of cache; can be changed across boots
 
 /* Application declares the limit of key-sizes it intends to use */
 #define USER_MAX_KEY_SIZE ((int)100)
@@ -27,6 +27,7 @@ void parse_line(const char *line, char *command, char *table_name, char *key, ch
 
 int main(int argc, char **argv)
 {
+    int count = 0;
     printf("     **** SplinterDB Basic example program ****\n\n");
 
     // Initialize data configuration, using default key-comparison handling.
@@ -73,7 +74,11 @@ int main(int argc, char **argv)
             slice skey = slice_create((size_t)strlen(key), key);
             slice svalue = slice_create((size_t)strlen(value), value);
             rc = splinterdb_insert(spl_handle, skey, svalue);
-            printf("Inserted key '%s'\n", key);
+            count++;
+            if (count % 1000 == 0)
+            {
+                printf("Inserted %d records\n", count);
+            }
         }
     }
 

@@ -23,15 +23,15 @@ cd ycsb-0.17.0
 ./bin/ycsb.sh run basic -P workloads/workloadf > outWorkloadRunF.txt
 
 # Copy the results to ycsb folder
-cp outWorkloadA.txt ../
-cp outWorkloadRunA.txt ../
-cp outWorkloadB.txt ../
-cp outWorkloadRunB.txt ../
-cp outWorkloadC.txt ../
-cp outWorkloadRunC.txt ../
-cp outWorkloadD.txt ../
-cp outWorkloadRunD.txt ../
-cp outWorkloadE.txt ../
-cp outWorkloadRunE.txt ../
-cp outWorkloadF.txt ../
-cp outWorkloadRunF.txt ../
+mv outWorkloadA.txt ../
+mv outWorkloadRunA.txt ../
+mv outWorkloadB.txt ../
+mv outWorkloadRunB.txt ../
+mv outWorkloadC.txt ../
+mv outWorkloadRunC.txt ../
+mv outWorkloadD.txt ../
+mv outWorkloadRunD.txt ../
+mv outWorkloadE.txt ../
+mv outWorkloadRunE.txt ../
+mv outWorkloadF.txt ../
+mv outWorkloadRunF.txt ../

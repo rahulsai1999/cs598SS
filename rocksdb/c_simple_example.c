@@ -32,6 +32,7 @@ void parse_line(const char *line, char *command, char *table_name, char *key, ch
 
 int main(int argc, char **argv)
 {
+    int count = 0;
     rocksdb_t *db;
     rocksdb_backup_engine_t *be;
     rocksdb_options_t *options = rocksdb_options_create();
@@ -91,6 +92,11 @@ int main(int argc, char **argv)
                         &err);
             printf("Inserted key '%s'\n", key);
             assert(!err);
+            count++;
+            if (count % 1000 == 0)
+            {
+                printf("Inserted %d records\n", count);
+            }
         }
     }
 
