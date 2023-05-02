@@ -66,6 +66,8 @@ int main(int argc, char **argv)
         return 1;
     }
 
+    printf("Starting writes...\n");
+
     while (fgets(line, sizeof(line), file) != NULL)
     {
         parse_line(line, command, table_name, key, value);

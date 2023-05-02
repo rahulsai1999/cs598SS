@@ -80,6 +80,8 @@ int main(int argc, char **argv)
     be = rocksdb_backup_engine_open(options, DBBackupPath, &err);
     assert(!err);
 
+    printf("Starting writes...\n");
+
     // Put key-value
     // Read the file line by line
     rocksdb_writeoptions_t *writeoptions = rocksdb_writeoptions_create();
@@ -90,7 +92,6 @@ int main(int argc, char **argv)
         {
             rocksdb_put(db, writeoptions, key, strlen(key), value, strlen(value) + 1,
                         &err);
-            printf("Inserted key '%s'\n", key);
             assert(!err);
             count++;
             if (count % 1000 == 0)
