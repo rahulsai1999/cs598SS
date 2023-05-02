@@ -74,7 +74,7 @@ int main(int argc, char **argv)
 
     FILE *file;
     char *filename = argv[1]; // Replace with your desired file name
-    char line[1500];          // Buffer to store each line read from the file
+    char line[1500];          // Buffer to store each linead read from the file
 
     char command[10];    // Buffer to store the command
     char table_name[20]; // Buffer to store the table name
@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 
     std::cout << "Starting writes..." << std::endl;
 
-    size_t num_threads = 8; // Adjust as needed
+    size_t num_threads = 1; // Adjust as needed
     size_t lines_per_thread = lines.size() / num_threads;
 
     std::vector<std::thread> threads;
