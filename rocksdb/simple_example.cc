@@ -103,13 +103,14 @@ int main(int argc, char **argv)
 
     std::cout << "Starting writes..." << std::endl;
 
-    size_t num_threads = 4; // Adjust as needed
+    size_t num_threads = 8; // Adjust as needed
     size_t lines_per_thread = lines.size() / num_threads;
 
     std::vector<std::thread> threads;
 
     for (size_t i = 0; i < num_threads; ++i)
     {
+        std::cout << "Starting thread " << i << std::endl;
         size_t start = i * lines_per_thread;
         size_t end = (i == num_threads - 1) ? lines.size() : (i + 1) * lines_per_thread;
         std::vector<std::string> thread_lines(lines.begin() + start, lines.begin() + end);
