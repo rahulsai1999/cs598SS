@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     char line[1500], command[10], table_name[20], rkey[100], rvalue[1300];
 
     home = example_setup(argc, argv);
-    filename = "outWorkloadA.txt"; // Declare filename as const
+    filename = argv[1]; // Declare filename as const
 
     // Open the file
     file = fopen(filename, "r");
