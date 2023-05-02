@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 
     std::cout << "Starting writes..." << std::endl;
 
-    size_t num_threads = 2; // Adjust as needed
+    size_t num_threads = 32; // Adjust as needed
     size_t lines_per_thread = lines.size() / num_threads;
 
     std::vector<std::thread> threads;
