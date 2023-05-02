@@ -3,7 +3,7 @@
 workloadName=$1
 
 rm splinterdb/examples/$workloadName
-rm splinterdb/splinterdb_intro_db
+rm splinterdb/examples/splinterdb_intro_db
 
 mkdir ../data/splinterdb/$workloadName
 mv ../disk_utilization.csv ../data/splinterdb/$workloadName
