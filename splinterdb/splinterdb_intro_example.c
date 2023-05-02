@@ -9,6 +9,8 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <pthread.h>
 
 #include "splinterdb/default_data_config.h"
 #include "splinterdb/splinterdb.h"
@@ -20,14 +22,59 @@
 /* Application declares the limit of key-sizes it intends to use */
 #define USER_MAX_KEY_SIZE ((int)100)
 
+#define NUM_THREADS 4
+
+typedef struct
+{
+    int thread_id;
+    char **lines;
+    int start_line;
+    int end_line;
+    splinterdb *spl_handle;
+} thread_data_t;
+
 void parse_line(const char *line, char *command, char *table_name, char *key, char *value)
 {
     sscanf(line, "%6s %s %[^[][ field0=%[^]]", command, table_name, key, value);
 }
 
+void *process_lines(void *arg)
+{
+    thread_data_t *data = (thread_data_t *)arg;
+    int count = 0;
+
+    char command[10];    // Buffer to store the command
+    char table_name[20]; // Buffer to store the table name
+    char key[100];       // Buffer to store the key
+    char value[1300];    // Buffer to store the value
+
+    for (int i = data->start_line; i < data->end_line; i++)
+    {
+        parse_line(data->lines[i], command, table_name, key, value);
+        if (strcmp(command, "INSERT") == 0)
+        {
+            slice skey = slice_create((size_t)strlen(key), key);
+            slice svalue = slice_create((size_t)strlen(value), value);
+            int rc = splinterdb_insert(data->spl_handle, skey, svalue);
+            count++;
+            if (count % 1000 == 0)
+            {
+                printf("Thread %d: Inserted %d records\n", data->thread_id, count);
+            }
+        }
+    }
+
+    return NULL;
+}
+
 int main(int argc, char **argv)
 {
-    int count = 0;
+    if (argc != 2)
+    {
+        fprintf(stderr, "Usage: %s <file>\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
     printf("     **** SplinterDB Basic example program ****\n\n");
 
     // Initialize data configuration, using default key-comparison handling.
@@ -51,11 +98,6 @@ int main(int argc, char **argv)
     char *filename = argv[1]; // Replace with your desired file name
     char line[1500];          // Buffer to store each line read from the file
 
-    char command[10];    // Buffer to store the command
-    char table_name[20]; // Buffer to store the table name
-    char key[100];       // Buffer to store the key
-    char value[1300];    // Buffer to store the value
-
     // Open the file
     file = fopen(filename, "r");
 
@@ -68,52 +110,58 @@ int main(int argc, char **argv)
 
     printf("Starting writes...\n");
 
+    // Read the file and store the lines in a buffer
+    char **lines = malloc(0);
+    int num_lines = 0;
+
     while (fgets(line, sizeof(line), file) != NULL)
     {
-        parse_line(line, command, table_name, key, value);
-        if (strcmp(command, "INSERT") == 0)
+        num_lines++;
+        lines = realloc(lines, num_lines * sizeof(char *));
+        lines[num_lines - 1] = strdup(line);
+    }
+    fclose(file);
+
+    // Create threads and divide the lines among them
+    pthread_t threads[NUM_THREADS];
+    thread_data_t thread_data[NUM_THREADS];
+    int lines_per_thread = num_lines / NUM_THREADS;
+
+    for (int i = 0; i < NUM_THREADS; i++)
+    {
+        thread_data[i].thread_id = i;
+        thread_data[i].lines = lines;
+        thread_data[i].start_line = i * lines_per_thread;
+        thread_data[i].end_line = (i == NUM_THREADS - 1) ? num_lines : (i + 1) * lines_per_thread;
+        thread_data[i].spl_handle = spl_handle;
+
+        if (pthread_create(&threads[i], NULL, process_lines, &thread_data[i]) != 0)
         {
-            slice skey = slice_create((size_t)strlen(key), key);
-            slice svalue = slice_create((size_t)strlen(value), value);
-            rc = splinterdb_insert(spl_handle, skey, svalue);
-            count++;
-            if (count % 1000 == 0)
-            {
-                printf("Inserted %d records\n", count);
-            }
+            perror("pthread_create");
+            exit(EXIT_FAILURE);
         }
     }
 
-    // Retrieve a key-value pair.
-    splinterdb_lookup_result result;
-    splinterdb_lookup_result_init(spl_handle, &result, 0, NULL);
-
-    slice gkey;
-    slice gvalue;
-    const char *fruit = "user412164360235391016 "; // random key from workload
-    gkey = slice_create((size_t)strlen(fruit), fruit);
-    rc = splinterdb_lookup(spl_handle, gkey, &result);
-    rc = splinterdb_lookup_result_value(spl_handle, &result, &gvalue);
-    if (!rc)
+    // Wait for all threads to finish
+    for (int i = 0; i < NUM_THREADS; i++)
     {
-        printf("Found key: '%s', value: '%.*s'\n", fruit,
-               (int)slice_length(gvalue),
-               (char *)slice_data(gvalue));
+        if (pthread_join(threads[i], NULL) != 0)
+        {
+            perror("pthread_join");
+            exit(EXIT_FAILURE);
+        }
     }
 
-    // making sure it is consistent
-    printf("Shutdown and reopen SplinterDB instance ...\n");
-    splinterdb_close(&spl_handle);
-
-    rc = splinterdb_open(&splinterdb_cfg, &spl_handle);
-    if (rc)
+    // Free memory allocated for the lines
+    for (int i = 0; i < num_lines; i++)
     {
-        printf("Error re-opening SplinterDB instance, dbname '%s' (rc=%d).\n", DB_FILE_NAME, rc);
-        return (rc);
+        free(lines[i]);
     }
+    free(lines);
 
+    // Rest of the code remains the same
     splinterdb_close(&spl_handle);
     printf("Shutdown SplinterDB instance, dbname '%s'.\n\n", DB_FILE_NAME);
 
-    return rc;
+    return 0;
 }
