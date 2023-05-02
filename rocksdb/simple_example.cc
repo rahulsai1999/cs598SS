@@ -49,14 +49,14 @@ void process_lines(DB *db, const std::vector<std::string> &lines)
 
         if (strcmp(command, "INSERT") == 0)
         {
-            std::unique_lock<std::mutex> lock(mtx);
+            // std::unique_lock<std::mutex> lock(mtx);
             std::string key_str(key);
             std::string value_str(value);
 
             Status s = db->Put(WriteOptions(), key_str, value_str);
             assert(s.ok());
 
-            lock.unlock();
+            // lock.unlock();
         }
     }
 }
