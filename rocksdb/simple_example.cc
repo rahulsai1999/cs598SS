@@ -5,6 +5,8 @@
 
 #include <cstdio>
 #include <string>
+#include <sstream>
+#include <iostream>
 
 #include "rocksdb/db.h"
 #include "rocksdb/options.h"
@@ -63,13 +65,18 @@ int main(int argc, char **argv)
     Status s = DB::Open(options, kDBPath, &db);
     assert(s.ok());
 
-    cout << "Starting writes..." << endl;
+    std::cout << "Starting writes..." << std::endl;
 
     while (fgets(line, sizeof(line), file) != NULL)
     {
         parse_line(line, command, table_name, key, value);
         if (strcmp(command, "INSERT") == 0)
         {
+            // convert to string
+            std::string key_str(key);
+            std::string value_str(value);
+
+            // insert
             s = db->Put(WriteOptions(), key, value);
             assert(s.ok());
 
@@ -82,9 +89,10 @@ int main(int argc, char **argv)
     }
 
     // get value
-    s = db->Get(ReadOptions(), "user412164360235391016 ", &value);
+    std::string rvalue;
+    s = db->Get(ReadOptions(), "user412164360235391016 ", &rvalue);
     assert(s.ok());
-    cout << value << endl;
+    std::cout << rvalue << std::endl;
 
     delete db;
 
