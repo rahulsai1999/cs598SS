@@ -8,6 +8,7 @@ static const char *home;
 int main(int argc, char *argv[])
 {
     FILE *file;
+    int count = 0;
     WT_CONNECTION *conn = NULL;
     WT_CURSOR *cursor = NULL;
     WT_SESSION *session = NULL;
@@ -50,7 +51,11 @@ int main(int argc, char *argv[])
             cursor->set_key(cursor, rkey); /* Insert a record. */
             cursor->set_value(cursor, rvalue);
             error_check(cursor->insert(cursor));
-            printf("Inserted key '%s'\n", rkey);
+            count++;
+            if (count % 1000 == 0)
+            {
+                printf("Inserted %d records\n", count);
+            }
         }
     }
 
