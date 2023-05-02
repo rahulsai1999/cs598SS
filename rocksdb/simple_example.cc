@@ -10,11 +10,13 @@
 #include <thread>
 #include <mutex>
 #include <vector>
+#include <chrono>
 
 #include "rocksdb/db.h"
 #include "rocksdb/options.h"
 #include "rocksdb/slice.h"
 
+using namespace std::chrono;
 using ROCKSDB_NAMESPACE::DB;
 using ROCKSDB_NAMESPACE::Options;
 using ROCKSDB_NAMESPACE::PinnableSlice;
@@ -100,10 +102,11 @@ int main(int argc, char **argv)
     // open DB
     Status s = DB::Open(options, kDBPath, &db);
     assert(s.ok());
-
+    // start timer here
+    auto start = high_resolution_clock::now();
     std::cout << "Starting writes..." << std::endl;
 
-    size_t num_threads = 32; // Adjust as needed
+    size_t num_threads = 1; // Adjust as needed
     size_t lines_per_thread = lines.size() / num_threads;
 
     std::vector<std::thread> threads;
@@ -114,8 +117,7 @@ int main(int argc, char **argv)
         size_t start = i * lines_per_thread;
         size_t end = (i == num_threads - 1) ? lines.size() : (i + 1) * lines_per_thread;
         std::vector<std::string> thread_lines(lines.begin() + start, lines.begin() + end);
-
-        threads.emplace_back(process_lines, db, thread_lines);
+        threads.emplace_back(std::thread(process_lines, db, thread_lines));
     }
 
     for (auto &t : threads)
@@ -127,6 +129,9 @@ int main(int argc, char **argv)
     std::string rvalue;
     s = db->Get(ReadOptions(), "user412164360235391016 ", &rvalue);
     assert(s.ok());
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
+    std::cout << "Time takes to run " << num_threads << " threads:\t" << duration.count() << std::endl;
     std::cout << rvalue << std::endl;
 
     delete db;
