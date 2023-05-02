@@ -21,29 +21,42 @@
 /* Application declares the limit of key-sizes it intends to use */
 #define USER_MAX_KEY_SIZE ((int)100)
 
-void parse_line(const char *line, char *command, char *table_name, char *key, char *value)
+void parse_line(const char *line,
+                char *command,
+                char *table_name,
+                char *key,
+                char *value)
 {
     sscanf(line, "%6s %s %[^[][ field0=%[^]]", command, table_name, key, value);
 }
 
-void writePerThread(char *filename, splinterdb *spl_handle, int rc)
+typedef struct thread_data
 {
-    FILE *file;      // Replace with your desired file name
-    char line[1500]; // Buffer to store each line read from the file
+    char filename[256];
+    splinterdb *spl_handle;
+} thread_data;
 
-    char command[10];    // Buffer to store the command
-    char table_name[20]; // Buffer to store the table name
-    char key[100];       // Buffer to store the key
-    char value[1300];    // Buffer to store the value
+void *
+writePerThread(void *arg)
+{
+    thread_data *data = (thread_data *)arg;
+    char *filename = data->filename;
+    splinterdb *spl_handle = data->spl_handle;
 
-    // Open the file
+    FILE *file;
+    char line[1500];
+
+    char command[10];
+    char table_name[20];
+    char key[100];
+    char value[1300];
+
     file = fopen(filename, "r");
 
-    // Check if the file was opened successfully
     if (file == NULL)
     {
         fprintf(stderr, "Error: Unable to open file %s\n", filename);
-        return 1;
+        return NULL;
     }
 
     printf("Starting writes...\n");
@@ -58,10 +71,14 @@ void writePerThread(char *filename, splinterdb *spl_handle, int rc)
             splinterdb_insert(spl_handle, skey, svalue);
         }
     }
+
+    fclose(file);
 }
 
 int main()
 {
+    int NUM_THREADS = 2;
+
     printf("**** SplinterDB Basic example program ****\n\n");
 
     // Initialize data configuration, using default key-comparison handling.
@@ -82,26 +99,28 @@ int main()
     printf("Created SplinterDB instance, dbname '%s'.\n\n", DB_FILE_NAME);
 
     // threading stuff here
-    pthread_t thread1, thread2, thread3, thread4, thread5, thread6, thread7, thread8;
-    int rc1, rc2, rc3, rc4, rc5, rc6, rc7, rc8;
+    pthread_t threads[NUM_THREADS];
+    thread_data thread_data_array[NUM_THREADS];
 
-    pthread_create(&thread1, NULL, writePerThread, "xaa", spl_handle, rc);
-    pthread_create(&thread2, NULL, writePerThread, "xab", spl_handle, rc);
-    pthread_create(&thread3, NULL, writePerThread, "xac", spl_handle, rc);
-    pthread_create(&thread4, NULL, writePerThread, "xad", spl_handle, rc);
-    pthread_create(&thread5, NULL, writePerThread, "xae", spl_handle, rc);
-    pthread_create(&thread6, NULL, writePerThread, "xaf", spl_handle, rc);
-    pthread_create(&thread7, NULL, writePerThread, "xag", spl_handle, rc);
-    pthread_create(&thread8, NULL, writePerThread, "xah", spl_handle, rc);
+    for (int i = 0; i < NUM_THREADS; i++)
+    {
+        snprintf(thread_data_array[i].filename,
+                 sizeof(thread_data_array[i].filename),
+                 "xa%c",
+                 'a' + i);
+        thread_data_array[i].spl_handle = spl_handle;
+        int rc = pthread_create(
+            &threads[i], NULL, writePerThread, (void *)&thread_data_array[i]);
+        if (rc)
+        {
+            printf("ERROR: return code from pthread_create() is %d\n", rc);
+        }
+    }
 
-    pthread_join(thread1, NULL);
-    pthread_join(thread2, NULL);
-    pthread_join(thread3, NULL);
-    pthread_join(thread4, NULL);
-    pthread_join(thread5, NULL);
-    pthread_join(thread6, NULL);
-    pthread_join(thread7, NULL);
-    pthread_join(thread8, NULL);
+    for (int i = 0; i < NUM_THREADS; i++)
+    {
+        pthread_join(threads[i], NULL);
+    }
 
     // end thread stuff here
     // Retrieve a key-value pair.
@@ -116,7 +135,8 @@ int main()
     rc = splinterdb_lookup_result_value(spl_handle, &result, &gvalue);
     if (!rc)
     {
-        printf("Found key: '%s', value: '%.*s'\n", fruit,
+        printf("Found key: '%s', value: '%.*s'\n",
+               fruit,
                (int)slice_length(gvalue),
                (char *)slice_data(gvalue));
     }
@@ -128,7 +148,9 @@ int main()
     rc = splinterdb_open(&splinterdb_cfg, &spl_handle);
     if (rc)
     {
-        printf("Error re-opening SplinterDB instance, dbname '%s' (rc=%d).\n", DB_FILE_NAME, rc);
+        printf("Error re-opening SplinterDB instance, dbname '%s' (rc=%d).\n",
+               DB_FILE_NAME,
+               rc);
         return (rc);
     }
 
