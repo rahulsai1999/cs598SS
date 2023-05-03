@@ -80,7 +80,7 @@ writePerThread(void *arg)
 
 int main(int argc, char *argv[])
 {
-    int NUM_THREADS = argv[1];
+    int NUM_THREADS = atoi(argv[1]);
 
     printf("**** SplinterDB Basic example program ****\n\n");
 
