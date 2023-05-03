@@ -107,9 +107,8 @@ int main(int argc, char *argv[])
     pthread_t threads[NUM_THREADS];
     thread_data thread_data_array[NUM_THREADS];
 
-    time_t start, end;
-
-    start = time(NULL);
+    clock_t start, end;
+    start = clock();
 
     for (int i = 0; i < NUM_THREADS; i++)
     {
@@ -150,9 +149,9 @@ int main(int argc, char *argv[])
                (char *)slice_data(gvalue));
     }
 
-    end = time(NULL);
-
-    printf("Time taken: %ld\n", end - start);
+    end = clock();
+    double time_taken = ((double)(end - start)) / CLOCKS_PER_SEC;
+    printf("Time taken: %f\n", time_taken);
 
     // making sure it is consistent
     printf("Shutdown and reopen SplinterDB instance ...\n");
