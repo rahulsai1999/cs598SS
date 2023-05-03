@@ -15,7 +15,7 @@
 #include "splinterdb/splinterdb.h"
 
 #define DB_FILE_NAME "splinterdb_intro_db"
-#define DB_FILE_SIZE_MB 2000 // Size of SplinterDB device; Fixed when created
+#define DB_FILE_SIZE_MB 2040 // Size of SplinterDB device; Fixed when created
 #define CACHE_SIZE_MB 512    // Size of cache; can be changed across boots
 
 /* Application declares the limit of key-sizes it intends to use */
@@ -52,6 +52,7 @@ writePerThread(void *arg)
     char value[1300];
 
     file = fopen(filename, "r");
+    printf("filename: %s\n", filename);
 
     if (file == NULL)
     {
@@ -60,6 +61,8 @@ writePerThread(void *arg)
     }
 
     printf("Starting writes...\n");
+
+    splinterdb_register_thread(spl_handle);
 
     while (fgets(line, sizeof(line), file) != NULL)
     {
@@ -77,7 +80,7 @@ writePerThread(void *arg)
 
 int main()
 {
-    int NUM_THREADS = 2;
+    int NUM_THREADS = 7;
 
     printf("**** SplinterDB Basic example program ****\n\n");
 
