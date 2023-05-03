@@ -106,7 +106,7 @@ int main(int argc, char **argv)
     auto start = high_resolution_clock::now();
     std::cout << "Starting writes..." << std::endl;
 
-    size_t num_threads = 1; // Adjust as needed
+    size_t num_threads = atoi(argv[2]);
     size_t lines_per_thread = lines.size() / num_threads;
 
     std::vector<std::thread> threads;

@@ -1,2 +1,4 @@
-`sudo bash run.sh workloadA.txt`
-`sudo bash clean.sh workloadA.txt`
+```sh
+sudo bash run.sh outWorkloadA.txt 16
+sudo bash clean.sh outWorkloadA.txt
+```
