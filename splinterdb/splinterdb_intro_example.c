@@ -11,6 +11,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "splinterdb/default_data_config.h"
 #include "splinterdb/splinterdb.h"
@@ -106,6 +107,10 @@ int main(int argc, char *argv[])
     pthread_t threads[NUM_THREADS];
     thread_data thread_data_array[NUM_THREADS];
 
+    time_t start, end;
+
+    start = time(NULL);
+
     for (int i = 0; i < NUM_THREADS; i++)
     {
         snprintf(thread_data_array[i].filename,
@@ -144,6 +149,10 @@ int main(int argc, char *argv[])
                (int)slice_length(gvalue),
                (char *)slice_data(gvalue));
     }
+
+    end = time(NULL);
+
+    printf("Time taken: %ld\n", end - start);
 
     // making sure it is consistent
     printf("Shutdown and reopen SplinterDB instance ...\n");
