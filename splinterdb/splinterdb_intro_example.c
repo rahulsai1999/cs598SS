@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <pthread.h>
+#include <stdlib.h>
 
 #include "splinterdb/default_data_config.h"
 #include "splinterdb/splinterdb.h"

@@ -1,2 +1,2 @@
-gcc splinterdb_intro_example.c -DSPLINTERDB_PLATFORM_DIR=platform_linux -l splinterdb
-./a.out
+sudo bash run.sh outWorkloadA.txt 16
+sudo bash clean.sh outWorkloadA.txt
