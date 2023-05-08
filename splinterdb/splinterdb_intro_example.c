@@ -21,8 +21,6 @@
 #define Giga (1024UL * Mega)
 
 #define DB_FILE_NAME "splinterdb_intro_db"
-#define DB_FILE_SIZE_MB 2040 // Size of SplinterDB device; Fixed when created
-#define CACHE_SIZE_MB 512    // Size of cache; can be changed across boots
 
 /* Application declares the limit of key-sizes it intends to use */
 #define USER_MAX_KEY_SIZE ((int)100)
@@ -98,8 +96,8 @@ int main(int argc, char *argv[])
     splinterdb_config splinterdb_cfg;
     memset(&splinterdb_cfg, 0, sizeof(splinterdb_cfg));
     splinterdb_cfg.filename = DB_FILE_NAME;
-    splinterdb_cfg.disk_size = (4 * Giga);
-    splinterdb_cfg.cache_size = (1 * Giga);
+    splinterdb_cfg.disk_size = (25 * Giga);
+    splinterdb_cfg.cache_size = (2 * Giga);
     splinterdb_cfg.data_cfg = &splinter_data_cfg;
 
     splinterdb *spl_handle = NULL; // To a running SplinterDB instance
