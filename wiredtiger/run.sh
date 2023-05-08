@@ -3,7 +3,7 @@
 workloadName=$1
 
 cp ex_access.c wiredtiger/examples/c/
-cp ../ycsb/ycsb-0.17.0/$workloadName wiredtiger/build/examples/c/ex_access/
+cp ../ycsb/$workloadName wiredtiger/build/examples/c/ex_access/
 cd wiredtiger/build/examples/c
 make ex_access
 cd ex_access
