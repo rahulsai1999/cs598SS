@@ -96,8 +96,8 @@ int main(int argc, char *argv[])
     splinterdb_config splinterdb_cfg;
     memset(&splinterdb_cfg, 0, sizeof(splinterdb_cfg));
     splinterdb_cfg.filename = DB_FILE_NAME;
-    splinterdb_cfg.disk_size = (25 * Giga);
-    splinterdb_cfg.cache_size = (2 * Giga);
+    splinterdb_cfg.disk_size = (5 * Giga);
+    splinterdb_cfg.cache_size = (1290 * Mega); // always just more than 25% of disk size
     splinterdb_cfg.data_cfg = &splinter_data_cfg;
 
     splinterdb *spl_handle = NULL; // To a running SplinterDB instance
@@ -126,6 +126,8 @@ int main(int argc, char *argv[])
             printf("ERROR: return code from pthread_create() is %d\n", rc);
         }
     }
+
+    printf("Waiting for threads to finish...\n");
 
     for (int i = 0; i < NUM_THREADS; i++)
     {
