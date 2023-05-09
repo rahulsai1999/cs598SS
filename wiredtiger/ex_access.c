@@ -6,6 +6,8 @@
 
 static const char *home;
 
+void *write_per_thread(void *arg);
+
 typedef struct thread_data
 {
     char filename[256];
@@ -17,6 +19,7 @@ void *write_per_thread(void *arg)
     thread_data *data = (thread_data *)arg;
     char *filename = data->filename;
     WT_SESSION *session = data->session;
+    WT_CURSOR *cursor;
 
     FILE *file;
     char line[1500];
@@ -35,7 +38,6 @@ void *write_per_thread(void *arg)
         return NULL;
     }
 
-    WT_CURSOR *cursor;
     error_check(session->open_cursor(session, "table:access", NULL, NULL, &cursor));
 
     while (fgets(line, sizeof(line), file) != NULL)
@@ -56,19 +58,20 @@ void *write_per_thread(void *arg)
 
 int main(int argc, char *argv[])
 {
+    int rc;
     int NUM_THREADS = atoi(argv[1]);
-
-    home = example_setup(argc, argv);
 
     WT_CONNECTION *conn = NULL;
     WT_SESSION *session = NULL;
 
+    pthread_t threads[NUM_THREADS];
+    thread_data thread_data_array[NUM_THREADS];
+
+    home = example_setup(argc, argv);
+
     error_check(wiredtiger_open(home, NULL, "create,statistics=(all)", &conn));
     error_check(conn->open_session(conn, NULL, NULL, &session));
     error_check(session->create(session, "table:access", "key_format=S,value_format=S"));
-
-    pthread_t threads[NUM_THREADS];
-    thread_data thread_data_array[NUM_THREADS];
 
     for (int i = 0; i < NUM_THREADS; i++)
     {
@@ -77,7 +80,7 @@ int main(int argc, char *argv[])
                  "xa%c",
                  'a' + i);
         thread_data_array[i].session = session;
-        int rc = pthread_create(
+        rc = pthread_create(
             &threads[i], NULL, write_per_thread, (void *)&thread_data_array[i]);
         if (rc)
         {

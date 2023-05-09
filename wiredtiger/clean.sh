@@ -2,8 +2,10 @@
 
 workloadName=$1
 
+rm wiredtiger/build/examples/c/ex_access/ex_access
 rm wiredtiger/build/examples/c/ex_access/$workloadName
 rm -rf wiredtiger/build/examples/c/WT_HOME
+rm -rf wiredtiger/build/examples/c/ex_access/WT_HOME
 
 mkdir ../data/wiredtiger/$workloadName
 mv ../disk_utilization.csv ../data/wiredtiger/$workloadName
