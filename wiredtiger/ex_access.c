@@ -1,74 +1,98 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <pthread.h>
 #include <test_util.h>
 
 static const char *home;
 
-int main(int argc, char *argv[])
+typedef struct thread_data
 {
+    char filename[256];
+    WT_SESSION *session;
+} thread_data;
+
+void *write_per_thread(void *arg)
+{
+    thread_data *data = (thread_data *)arg;
+    char *filename = data->filename;
+    WT_SESSION *session = data->session;
+
     FILE *file;
-    int count = 0;
-    WT_CONNECTION *conn = NULL;
-    WT_CURSOR *cursor = NULL;
-    WT_SESSION *session = NULL;
-    const char *key, *value, *skey, *filename;
-    char line[1500], command[10], table_name[20], rkey[100], rvalue[1300];
+    char line[1500];
 
-    home = example_setup(argc, argv);
-    filename = argv[1]; // Declare filename as const
+    char command[10];
+    char table_name[20];
+    char key[100];
+    char value[1300];
 
-    // Open the file
     file = fopen(filename, "r");
+    printf("filename: %s\n", filename);
 
-    // Check if the file was opened successfully
     if (file == NULL)
     {
         fprintf(stderr, "Error: Unable to open file %s\n", filename);
-        return 1;
+        return NULL;
     }
 
-    /* Open a connection to the database, creating it if necessary. */
-    error_check(wiredtiger_open(home, NULL, "create,statistics=(all)", &conn));
-
-    /* Open a session handle for the database. */
-    error_check(conn->open_session(conn, NULL, NULL, &session));
-    /*! [access example connection] */
-
-    /*! [access example table create] */
-    error_check(session->create(session, "table:access", "key_format=S,value_format=S"));
-    /*! [access example table create] */
-
-    /*! [access example cursor open] */
+    WT_CURSOR *cursor;
     error_check(session->open_cursor(session, "table:access", NULL, NULL, &cursor));
-    /*! [access example cursor open] */
 
     while (fgets(line, sizeof(line), file) != NULL)
     {
-        sscanf(line, "%6s %s %[^[][ field0=%[^]]", command, table_name, rkey, rvalue);
+        sscanf(line, "%6s %s %[^[][ field0=%[^]]", command, table_name, key, value);
         if (strcmp(command, "INSERT") == 0)
         {
-            cursor->set_key(cursor, rkey); /* Insert a record. */
-            cursor->set_value(cursor, rvalue);
+            cursor->set_key(cursor, key);
+            cursor->set_value(cursor, value);
             error_check(cursor->insert(cursor));
-            count++;
-            if (count % 1000 == 0)
-            {
-                printf("Inserted %d records\n", count);
-            }
         }
     }
 
-    error_check(cursor->reset(cursor));
-    skey = "user412164360235391016 ";
-    cursor->set_key(cursor, skey);
-    error_check(cursor->search(cursor));
+    fclose(file);
+    error_check(cursor->close(cursor));
+    return NULL;
+}
 
-    error_check(cursor->get_key(cursor, &key));
-    error_check(cursor->get_value(cursor, &value));
-    printf("Got record: %s : %s\n", key, value);
+int main(int argc, char *argv[])
+{
+    int NUM_THREADS = atoi(argv[1]);
 
-    error_check(conn->close(conn, NULL)); /* Close all handles. */
+    home = example_setup(argc, argv);
 
-    return (EXIT_SUCCESS);
+    WT_CONNECTION *conn = NULL;
+    WT_SESSION *session = NULL;
+
+    error_check(wiredtiger_open(home, NULL, "create,statistics=(all)", &conn));
+    error_check(conn->open_session(conn, NULL, NULL, &session));
+    error_check(session->create(session, "table:access", "key_format=S,value_format=S"));
+
+    pthread_t threads[NUM_THREADS];
+    thread_data thread_data_array[NUM_THREADS];
+
+    for (int i = 0; i < NUM_THREADS; i++)
+    {
+        snprintf(thread_data_array[i].filename,
+                 sizeof(thread_data_array[i].filename),
+                 "xa%c",
+                 'a' + i);
+        thread_data_array[i].session = session;
+        int rc = pthread_create(
+            &threads[i], NULL, write_per_thread, (void *)&thread_data_array[i]);
+        if (rc)
+        {
+            printf("ERROR: return code from pthread_create() is %d\n", rc);
+        }
+    }
+
+    printf("Waiting for threads to finish...\n");
+
+    for (int i = 0; i < NUM_THREADS; i++)
+    {
+        pthread_join(threads[i], NULL);
+    }
+
+    error_check(conn->close(conn, NULL));
+
+    return EXIT_SUCCESS;
 }
