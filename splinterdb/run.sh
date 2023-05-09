@@ -3,7 +3,7 @@
 workloadName=$1
 myfilesize=$(wc -c ../ycsb/$workloadName | awk '{print $1}')
 let threads=$2
-let files=$threads
+let files=$threads+1
 let split=$myfilesize/$files
 
 cp splinterdb_intro_example.c splinterdb/examples/
