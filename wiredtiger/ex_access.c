@@ -1,33 +1,37 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <pthread.h>
-#include <test_util.h>
+#include "test_util.h"
 
 static const char *home;
 
-void *write_per_thread(void *arg);
+#define NUM_THREADS 8
 
 typedef struct thread_data
 {
     char filename[256];
-    WT_SESSION *session;
+    WT_CONNECTION *connection;
 } thread_data;
 
-void *write_per_thread(void *arg)
+static WT_THREAD_RET scan_thread(void *conn_arg)
 {
-    thread_data *data = (thread_data *)arg;
-    char *filename = data->filename;
-    WT_SESSION *session = data->session;
-    WT_CURSOR *cursor;
-
     FILE *file;
+    char *filename;
     char line[1500];
-
     char command[10];
     char table_name[20];
     char key[100];
     char value[1300];
+    int count = 0;
+
+    WT_CONNECTION *conn;
+    WT_CURSOR *cursor;
+    WT_SESSION *session;
+
+    thread_data *data = (thread_data *)conn_arg;
+
+    conn = data->connection;
+    filename = data->filename;
+
+    error_check(conn->open_session(conn, NULL, NULL, &session));
+    error_check(session->open_cursor(session, "table:access", NULL, NULL, &cursor));
 
     file = fopen(filename, "r");
     printf("filename: %s\n", filename);
@@ -38,8 +42,6 @@ void *write_per_thread(void *arg)
         return NULL;
     }
 
-    error_check(session->open_cursor(session, "table:access", NULL, NULL, &cursor));
-
     while (fgets(line, sizeof(line), file) != NULL)
     {
         sscanf(line, "%6s %s %[^[][ field0=%[^]]", command, table_name, key, value);
@@ -48,54 +50,56 @@ void *write_per_thread(void *arg)
             cursor->set_key(cursor, key);
             cursor->set_value(cursor, value);
             error_check(cursor->insert(cursor));
+            count++;
         }
+
+        if (count % 10000 == 0)
+            printf("Thread %s: %d records inserted\n", filename, count);
     }
 
-    fclose(file);
-    error_check(cursor->close(cursor));
-    return NULL;
+    return (WT_THREAD_RET_VALUE);
 }
 
 int main(int argc, char *argv[])
 {
-    int rc;
-    int NUM_THREADS = atoi(argv[1]);
+    int i;
+    const char *key, *value, *skey;
 
-    WT_CONNECTION *conn = NULL;
-    WT_SESSION *session = NULL;
-
-    pthread_t threads[NUM_THREADS];
-    thread_data thread_data_array[NUM_THREADS];
+    WT_CONNECTION *conn;
+    WT_SESSION *session;
+    WT_CURSOR *cursor;
+    wt_thread_t threads[NUM_THREADS];
+    thread_data args[NUM_THREADS];
 
     home = example_setup(argc, argv);
 
-    error_check(wiredtiger_open(home, NULL, "create,statistics=(all)", &conn));
+    error_check(wiredtiger_open(home, NULL, "create", &conn));
     error_check(conn->open_session(conn, NULL, NULL, &session));
     error_check(session->create(session, "table:access", "key_format=S,value_format=S"));
+    error_check(session->open_cursor(session, "table:access", NULL, "overwrite", &cursor));
 
-    for (int i = 0; i < NUM_THREADS; i++)
+    for (i = 0; i < NUM_THREADS; i++)
     {
-        snprintf(thread_data_array[i].filename,
-                 sizeof(thread_data_array[i].filename),
-                 "xa%c",
-                 'a' + i);
-        thread_data_array[i].session = session;
-        rc = pthread_create(
-            &threads[i], NULL, write_per_thread, (void *)&thread_data_array[i]);
-        if (rc)
-        {
-            printf("ERROR: return code from pthread_create() is %d\n", rc);
-        }
+        snprintf(args[i].filename, sizeof(args[i].filename), "xa%c", 'a' + i);
+        args[i].connection = conn;
+
+        printf("Creating thread %d\n", i);
+        error_check(__wt_thread_create(NULL, &threads[i], scan_thread, &args[i]));
     }
 
-    printf("Waiting for threads to finish...\n");
+    for (i = 0; i < NUM_THREADS; i++)
+        error_check(__wt_thread_join(NULL, &threads[i]));
 
-    for (int i = 0; i < NUM_THREADS; i++)
-    {
-        pthread_join(threads[i], NULL);
-    }
+    error_check(cursor->reset(cursor));
+
+    skey = "user412164360235391016 ";
+    cursor->set_key(cursor, skey);
+
+    error_check(cursor->search(cursor));
+    error_check(cursor->get_key(cursor, &key));
+    error_check(cursor->get_value(cursor, &value));
+    printf("Got record: %s : %s\n", key, value);
 
     error_check(conn->close(conn, NULL));
-
-    return EXIT_SUCCESS;
+    return (EXIT_SUCCESS);
 }
