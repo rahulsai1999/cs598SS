@@ -11,4 +11,9 @@ cp ../ycsb/$workloadName splinterdb/examples/
 cd splinterdb/examples/
 split -b $split $workloadName
 gcc splinterdb_intro_example.c -DSPLINTERDB_PLATFORM_DIR=platform_linux -lsplinterdb -lpthread
+echo "Completed Compilation"
+
+collectl -i 0.1 -om -P -f $workloadName$threads &
+PID=$!
 ./a.out $threads
+kill $PID

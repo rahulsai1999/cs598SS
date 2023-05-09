@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
     memset(&splinterdb_cfg, 0, sizeof(splinterdb_cfg));
     splinterdb_cfg.filename = DB_FILE_NAME;
     splinterdb_cfg.disk_size = (5 * Giga);
-    splinterdb_cfg.cache_size = (1290 * Mega); // always just more than 25% of disk size
+    splinterdb_cfg.cache_size = (1500 * Mega); // always just more than 25% of disk size
     splinterdb_cfg.data_cfg = &splinter_data_cfg;
 
     splinterdb *spl_handle = NULL; // To a running SplinterDB instance
@@ -109,8 +109,7 @@ int main(int argc, char *argv[])
     pthread_t threads[NUM_THREADS];
     thread_data thread_data_array[NUM_THREADS];
 
-    clock_t start, end;
-    start = clock();
+    fprintf(stdout, "%lu\n", (unsigned long)time(NULL)); 
 
     for (int i = 0; i < NUM_THREADS; i++)
     {
@@ -153,9 +152,7 @@ int main(int argc, char *argv[])
                (char *)slice_data(gvalue));
     }
 
-    end = clock();
-    double time_taken = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Time taken: %f\n", time_taken);
+    fprintf(stdout, "%lu\n", (unsigned long)time(NULL)); 
 
     // making sure it is consistent
     printf("Shutdown and reopen SplinterDB instance ...\n");
@@ -173,5 +170,5 @@ int main(int argc, char *argv[])
     splinterdb_close(&spl_handle);
     printf("Shutdown SplinterDB instance, dbname '%s'.\n\n", DB_FILE_NAME);
 
-    return rc;
+    return EXIT_SUCCESS;
 }
