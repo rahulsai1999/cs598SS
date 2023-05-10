@@ -7,7 +7,7 @@ def plot_disk_throughput(hardware_type, db_type):
     disk_throughput_lst = []
     actual_throughput_lst = []
     for num_thread in num_threads:
-        csv_file_name = f"data/final/{hardware_type}/{db_type}/outWorkloadA.txt{num_thread}-node1-20230509.tab"
+        csv_file_name = f"data/final/{hardware_type}/{db_type}/outWorkloadA.txt{num_thread}-node1-20230510.tab"
         df = pd.read_csv(csv_file_name, sep=' ', dtype=str)
         df['DateTime'] = pd.to_datetime(df['Date'] + ' ' + df['Time'])
         start = df['DateTime'][df.index[0]]
@@ -72,7 +72,11 @@ def plot_disk(csv_file_name, db_type, hardware_type):
    # Combine the "Date" and "Time" columns into a single "DateTime" column
     df['DateTime'] = pd.to_datetime(df['Date'] + ' ' + df['Time'])
     # Plot the data as a line graph
-    df['[DSK]WriteKB%'] = (pd.to_numeric(df['[DSK]WriteKBTot'])/1572000.0) *100
+    if hardware_type == "nvme":
+        df['[DSK]WriteKB%'] = (pd.to_numeric(df['[DSK]WriteKBTot'])/1572000.0) *100
+    else:
+        df['[DSK]WriteKB%'] = (pd.to_numeric(df['[DSK]WriteKBTot'])/380000.0) *100
+        
     plt.plot(df['DateTime'], df['[DSK]WriteKB%'], linestyle='-', marker='')
 
     # Set the x-axis label
@@ -94,7 +98,7 @@ def plot_disk(csv_file_name, db_type, hardware_type):
     plt.savefig(filename)
     plt.show()
 if __name__ == '__main__':
-    db_type = "rocksdb"
+    db_type = "wiredtiger"
     hardware_type = "nvme"
     plot_disk_throughput(hardware_type, db_type)
     # plot_disk(csv_file_name_disk, db_type, hardware_type)
