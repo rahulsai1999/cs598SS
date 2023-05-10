@@ -1,8 +1,12 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
 #include "test_util.h"
 
 static const char *home;
 
-#define NUM_THREADS 8
+#define NUM_THREADS 2
 
 typedef struct thread_data
 {
@@ -53,7 +57,7 @@ static WT_THREAD_RET scan_thread(void *conn_arg)
             count++;
         }
 
-        if (count % 10000 == 0)
+        if (count % 1000000 == 0)
             printf("Thread %s: %d records inserted\n", filename, count);
     }
 
@@ -78,6 +82,8 @@ int main(int argc, char *argv[])
     error_check(session->create(session, "table:access", "key_format=S,value_format=S"));
     error_check(session->open_cursor(session, "table:access", NULL, "overwrite", &cursor));
 
+    fprintf(stdout, "%lu\n", (unsigned long)time(NULL));
+
     for (i = 0; i < NUM_THREADS; i++)
     {
         snprintf(args[i].filename, sizeof(args[i].filename), "xa%c", 'a' + i);
@@ -89,6 +95,8 @@ int main(int argc, char *argv[])
 
     for (i = 0; i < NUM_THREADS; i++)
         error_check(__wt_thread_join(NULL, &threads[i]));
+
+    fprintf(stdout, "%lu\n", (unsigned long)time(NULL)); 
 
     error_check(cursor->reset(cursor));
 
