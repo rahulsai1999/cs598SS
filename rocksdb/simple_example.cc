@@ -38,27 +38,41 @@ void parse_line(const char *line, char *command, char *table_name, char *key, ch
     sscanf(line, "%6s %s %[^[][ field0=%[^]]", command, table_name, key, value);
 }
 
-void process_lines(DB *db, const std::vector<std::string> &lines)
+void process_lines(DB *db, char *filename, int i)
 {
-    for (const auto &line : lines)
-    {
-        char command[10];
-        char table_name[20];
-        char key[100];
-        char value[1300];
+    FILE *file;
+    int count = 0;
+    char line[1500];     // Buffer to store each linead read from the file
+    char command[10];    // Buffer to store the command
+    char table_name[20]; // Buffer to store the table name
+    char key[100];       // Buffer to store the key
+    char value[1300];    // Buffer to store the value
 
-        parse_line(line.c_str(), command, table_name, key, value);
+    file = fopen(filename, "r");
+
+    // Check if the file was opened successfully
+    if (file == NULL)
+    {
+        fprintf(stderr, "Error: Unable to open file %s\n", filename);
+    }
+
+    while (fgets(line, sizeof(line), file) != NULL)
+    {
+        parse_line(line, command, table_name, key, value);
 
         if (strcmp(command, "INSERT") == 0)
         {
-            // std::unique_lock<std::mutex> lock(mtx);
             std::string key_str(key);
             std::string value_str(value);
 
             Status s = db->Put(WriteOptions(), key_str, value_str);
             assert(s.ok());
+            count++;
+        }
 
-            // lock.unlock();
+        if (count % 1000000 == 0)
+        {
+            std::cout << "Thread " << i << " has written " << count << " records" << std::endl;
         }
     }
 }
@@ -74,50 +88,24 @@ int main(int argc, char **argv)
     // create the DB if it's not already present
     options.create_if_missing = true;
 
-    FILE *file;
-    char *filename = argv[1]; // Replace with your desired file name
-    char line[1500];          // Buffer to store each linead read from the file
-
-    char command[10];    // Buffer to store the command
-    char table_name[20]; // Buffer to store the table name
-    char key[100];       // Buffer to store the key
-    char value[1300];    // Buffer to store the value
-
-    // Open the file
-    file = fopen(filename, "r");
-
-    // Check if the file was opened successfully
-    if (file == NULL)
-    {
-        fprintf(stderr, "Error: Unable to open file %s\n", filename);
-        return 1;
-    }
-
-    std::vector<std::string> lines;
-    while (fgets(line, sizeof(line), file) != NULL)
-    {
-        lines.emplace_back(line);
-    }
-
     // open DB
     Status s = DB::Open(options, kDBPath, &db);
     assert(s.ok());
+
     // start timer here
     auto start = high_resolution_clock::now();
     std::cout << "Starting writes..." << std::endl;
 
-    size_t num_threads = atoi(argv[2]);
-    size_t lines_per_thread = lines.size() / num_threads;
+    int num_threads = atoi(argv[2]);
 
     std::vector<std::thread> threads;
 
-    for (size_t i = 0; i < num_threads; ++i)
+    for (int i = 0; i < num_threads; ++i)
     {
         std::cout << "Starting thread " << i << std::endl;
-        size_t start = i * lines_per_thread;
-        size_t end = (i == num_threads - 1) ? lines.size() : (i + 1) * lines_per_thread;
-        std::vector<std::string> thread_lines(lines.begin() + start, lines.begin() + end);
-        threads.emplace_back(std::thread(process_lines, db, thread_lines));
+        char filename_c[100];
+        snprintf(filename_c, sizeof(filename_c), "xa%c", 'a' + i);
+        threads.emplace_back(std::thread(process_lines, db, filename_c, i));
     }
 
     for (auto &t : threads)
@@ -125,13 +113,14 @@ int main(int argc, char **argv)
         t.join();
     }
 
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<seconds>(stop - start);
+
+    std::cout << "Time takes to run " << num_threads << " threads:\t" << duration.count() << std::endl;
+
     // get value
     std::string rvalue;
-    s = db->Get(ReadOptions(), "user412164360235391016 ", &rvalue);
-    assert(s.ok());
-    auto stop = high_resolution_clock::now();
-    auto duration = duration_cast<microseconds>(stop - start);
-    std::cout << "Time takes to run " << num_threads << " threads:\t" << duration.count() << std::endl;
+    s = db->Get(ReadOptions(), "user9138490946712082907 ", &rvalue);
     std::cout << rvalue << std::endl;
 
     delete db;
