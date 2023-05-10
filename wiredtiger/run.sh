@@ -14,5 +14,8 @@ cd ..
 make ex_access
 echo "Completed Compilation"
 
+collectl -i 0.1 -om -P -f $workloadName$threads &
+PID=$!
 cd ex_access
 ./ex_access $workloadName $threads
+kill $PID
