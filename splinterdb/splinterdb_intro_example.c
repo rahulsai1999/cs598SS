@@ -96,8 +96,8 @@ int main(int argc, char *argv[])
     splinterdb_config splinterdb_cfg;
     memset(&splinterdb_cfg, 0, sizeof(splinterdb_cfg));
     splinterdb_cfg.filename = DB_FILE_NAME;
-    splinterdb_cfg.disk_size = (3 * Giga);
-    splinterdb_cfg.cache_size = (250 * Mega); // always just more than 25% of disk size
+    splinterdb_cfg.disk_size = (12 * Giga);
+    splinterdb_cfg.cache_size = (1250 * Mega); // always just more than 25% of disk size
     splinterdb_cfg.data_cfg = &splinter_data_cfg;
 
     splinterdb *spl_handle = NULL; // To a running SplinterDB instance
