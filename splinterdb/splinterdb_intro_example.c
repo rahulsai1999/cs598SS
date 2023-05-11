@@ -96,8 +96,8 @@ int main(int argc, char *argv[])
     splinterdb_config splinterdb_cfg;
     memset(&splinterdb_cfg, 0, sizeof(splinterdb_cfg));
     splinterdb_cfg.filename = DB_FILE_NAME;
-    splinterdb_cfg.disk_size = (12 * Giga);
-    splinterdb_cfg.cache_size = (3000 * Mega); // always just more than 25% of disk size
+    splinterdb_cfg.disk_size = (3 * Giga);
+    splinterdb_cfg.cache_size = (250 * Mega); // always just more than 25% of disk size
     splinterdb_cfg.data_cfg = &splinter_data_cfg;
 
     splinterdb *spl_handle = NULL; // To a running SplinterDB instance
@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
     pthread_t threads[NUM_THREADS];
     thread_data thread_data_array[NUM_THREADS];
 
-    fprintf(stdout, "%lu\n", (unsigned long)time(NULL)); 
+    fprintf(stdout, "%lu\n", (unsigned long)time(NULL));
 
     for (int i = 0; i < NUM_THREADS; i++)
     {
@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
     const char *fruit = "user412164360235391016 "; // random key from workload
     gkey = slice_create((size_t)strlen(fruit), fruit);
     rc = splinterdb_lookup(spl_handle, gkey, &result);
-    rc = splinterdb_lookup_result_value(spl_handle, &result, &gvalue);
+    rc = splinterdb_lookup_result_value(&result, &gvalue);
     if (!rc)
     {
         printf("Found key: '%s', value: '%.*s'\n",
@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
                (char *)slice_data(gvalue));
     }
 
-    fprintf(stdout, "%lu\n", (unsigned long)time(NULL)); 
+    fprintf(stdout, "%lu\n", (unsigned long)time(NULL));
 
     // making sure it is consistent
     printf("Shutdown and reopen SplinterDB instance ...\n");
